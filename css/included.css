@@ -1,0 +1,4 @@
+:root {
+    --HMKT-INTERNAL-ACCENTCOLOR-BASE: var(--color-text);
+    --HMKT-INTERNAL-ACCENTCOLOR-RESULT: var(--color-text);
+}

@@ -1,5 +1,5 @@
 // Create a custom event emitter
-class EventEmitter {
+class HomekitEventEmmiter {
   constructor() {
     this.events = {};
   }

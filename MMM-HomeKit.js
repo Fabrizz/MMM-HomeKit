@@ -8,6 +8,7 @@
 "use strict";
 
 Module.register("MMM-HomeKit", {
+  /******************************************************** Configuration */
   defaults: {
     name: "MMM-HomeKit",
 
@@ -17,17 +18,15 @@ Module.register("MMM-HomeKit", {
       type: "internal", | "CSS var(x)"
       name: "TR(Magic Mirror)" | <str>,
       serviceName: "TR(Accent Color)" | <str>,
-    } | false
-    */
+    } | false */
 
-    screenState: false,
+    screenControl: true,
     /*
     screenState: {
       type: "internal", | "MMM-Remote-Control" | false
       name: "TR(Magic Mirror)" | <str>,
       serviceName: "TR(Screen)" | <str>,
-    } | false
-    */
+    } | false */
 
     pageChanges: false,
     /*
@@ -36,129 +35,144 @@ Module.register("MMM-HomeKit", {
       pages: ["Page 1", "Page 2"], | str[]
       name: "TR(Magic Mirror)" | <str>,
       serviceName: "TR(Page)" | <str>,
-    } | false
-    */
+    } | false */
 
     toggleLyrics: true,
     /*
     toggleLyrics: {
       name: "TR(Magic Mirror)" | <str>,
       serviceName: "TR(Lyrics)" | <str>,
-    } | false
-    */
+    } | false */
   },
 
+  /******************************************************** MM2 Loaders */
+  getScripts: function () {
+    let files = [
+      this.file("frontend/MirrorDeviceHandlers.js"),
+      this.file("frontend/HomekitEventEmmiter.js"),
+    ];
+    return files;
+  },
   getTranslations: function () {
     return {
       en: "translations/en.json",
+      es: "translations/es.json",
     };
   },
+  getStyles: function () {
+    return [this.file("css/included.css")];
+  },
+  getDom: function () {
+    const basicDom = document.createElement("div");
+    const moduleData = document.createComment("MMM-HMKT Version: 1.0.0");
+    const moduleVersion = document.createComment(
+      "MMM-HomeKit by Fabrizz | https://github.com/Fabrizz/MMM-HomeKit",
+    );
+    const moduleMessage = document.createComment("[!] DVC_CONFIG_NOTICE [!]");
+    basicDom.append(moduleData, moduleVersion, moduleMessage);
+    return basicDom;
+  },
 
+  /******************************************************** Start */
   start: function () {
     this.logBadge();
     this.moduleColor = "#FFE780";
     this.version = "0.1.0";
-    this.homekitDevices;
-    this.homekitDevices = this.getDevices();
+    this.frontendId = Date.now().toString(16);
+
+    this.thirdPartyNotificationsListenTo = [];
+    this.featureHandlers = [];
+    this.featureHandlersConfiguration = {};
+    /* eslint-disable no-undef */
+    this.devicesEventStream = new HomekitEventEmmiter();
+    this.availableFeatureHandlers = HKAvailableFeatureHandlers;
+    /* eslint-enable no-undef */
+
+    // Dinamically add handlers and configurations
+    this.availableFeatureHandlers.forEach(([key, FeatureHandler]) => {
+      try {
+        if (key in this.config && this.config[key] !== false) {
+          const Handler = new FeatureHandler(
+            this.config[key],
+            this.devicesEventStream,
+            (x, y) => this.translate(x, y),
+            (x, y) => this.sendNotification(x, y),
+            (x, y) => this.sendAccesoryNotification(x, y),
+            false,
+          );
+          this.thirdPartyNotificationsListenTo.push(...Handler.listenTo());
+          this.featureHandlersConfiguration[key] = Handler.configuration();
+          this.featureHandlers.push(Handler);
+        }
+      } catch (error) {
+        this.logError(this.translate("FHANDLER_CREATION_ERROR"), error);
+      }
+    });
   },
 
+  /******************************************************** Notifications */
   notificationReceived: function (notification, payload) {
     switch (notification) {
       case "ALL_MODULES_STARTED":
-        this.sendSocketNotification("HOMEKIT_START", this.homekitDevices);
-        this.logInfo("Sending devices to the backend.", this.homekitDevices);
+        this.sendSocketNotification(
+          "HOMEKIT_START",
+          this.featureHandlersConfiguration,
+        );
+        this.logInfo("CONFIGURATION_SYNC", this.featureHandlersConfiguration);
         break;
+
       default:
-        this.processThirdPartyNotifications(notification, payload);
+        // Handle notifications for devices
+        if (this.thirdPartyNotificationsListenTo.includes(notification))
+          this.devicesEventStream.emit(`__${notification}`, payload);
         break;
     }
   },
-
   socketNotificationReceived: function (notification, payload) {
     switch (notification) {
       case "HOMEKIT_READY":
-        this.logInfo("Homekit devices created successfully.");
+        this.logInfo("DEVICES_CREATED");
         break;
 
-      case "UPDATE_MIRROR":
-        console.log(payload);
-        if (payload.eventName === "LYRICS_CHANGED") {
-          if (payload.eventPayload) {
-            this.sendNotification("LYRICS_SHOW");
-          } else {
-            this.sendNotification("LYRICS_HIDE");
-          }
+      case "BACKEND_SHOULD_RESTART":
+        if (payload) {
+          this.logError("BACKEND_RESYNC_OUTDATED.");
+        } else {
+          this.logWarnBasic("BACKEND_RESYNC");
         }
-        if (payload.eventName === "ACCENT_CHANGED") {
-          if (payload.eventPayload[0]) {
-            document
-              .querySelector(":root")
-              .style.setProperty(
-                "--HMKT-TEST",
-                `rgb(${payload.eventPayload[1][0]}, ${payload.eventPayload[1][1]}, ${payload.eventPayload[1][2]})`,
-              );
-          }
-        }
+        break;
+
+      case "MIRROR_HANDLER_UPDATE":
+        console.log("UPDATE_MIRROR", payload);
+        this.devicesEventStream.emit(payload.eventName, payload.eventPayload);
         break;
     }
   },
-
-  getDevices() {
-    let devices = {};
-    /******************************************************* toggleLyrics */
-    if (this.config.toggleLyrics) {
-      if (typeof this.config.toggleLyrics === "boolean") {
-        devices.toggleLyrics = {
-          name: this.translate("HK_ACCS_BASE"),
-          serviceName: this.translate("HK_SRVC_LYRICS"),
-        };
-      } else {
-        devices.toggleLyrics = {
-          name:
-            this.config.toggleLyrics.name.substring(0, 16) ||
-            this.translate("HK_ACCS_BASE"),
-          serviceName:
-            this.config.toggleLyrics.serviceName.substring(0, 14) ||
-            this.translate("HK_SRVC_LYRICS"),
-        };
-      }
-      devices.toggleLyrics.listenFor = {};
-    }
-
-    /******************************************************* accentColor */
-    if (this.config.accentColor) {
-      if (typeof this.config.accentColor === "boolean") {
-        devices.accentColor = {
-          type: "internal",
-          onSpotifyColors: "ignore",
-          name: this.translate("HK_ACCS_BASE"),
-          serviceName: this.translate("HK_SRVC_ACCENT"),
-        };
-      } else {
-        devices.accentColor = {
-          type: this.config.accentColor.type || "internal",
-          onSpotifyColors: this.config.accentColor.onSpotifyColors || "ignore",
-          name:
-            this.config.accentColor.name.substring(0, 16) ||
-            this.translate("HK_ACCS_BASE"),
-          serviceName:
-            this.config.accentColor.serviceName.substring(0, 14) ||
-            this.translate("HK_SRVC_ACCENT"),
-        };
-      }
-    }
-
-    return devices;
+  sendAccesoryNotification(eventName, eventPayload) {
+    console.log(eventName, eventPayload, this);
+    this.sendSocketNotification("HOMEKIT_ACCESSORY_UPDATE", {
+      eventName,
+      eventPayload,
+    });
   },
 
-  processThirdPartyNotifications(name, payload) {},
-
+  /******************************************************** Console Logs */
   logInfo(str, ...arg) {
     console.info(
       `%c· MMM-HomeKit %c %c INFO %c ${str}`,
       "background-color:#FFE780;color:black;border-radius:0.5em",
       "",
       "background-color:#02675d;color:white;",
+      "",
+      ...arg,
+    );
+  },
+  logWarnBasic(str, ...arg) {
+    console.info(
+      `%c· MMM-HomeKit %c %c WARN %c ${str}`,
+      "background-color:#FFE780;color:black;border-radius:0.5em",
+      "",
+      "background-color:#a98403;color:white;",
       "",
       ...arg,
     );
@@ -185,7 +199,7 @@ Module.register("MMM-HomeKit", {
   },
   logBadge: function () {
     console.log(
-      ` ⠖ %c by Fabrizz %c ${this.name}`,
+      ` ⠖ %c by Fabrizz %c MMM-HomeKit `,
       "background-color: #555;color: #fff;margin: 0.4em 0em 0.4em 0.4em;padding: 5px 3px 5px 5px;border-radius: 7px 0 0 7px;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;",
       "background-color: #bc81e0;background-image: linear-gradient(90deg, #FFE780, #FA9012);color: #000;margin: 0.4em 0.4em 0.4em 0em;padding: 5px 5px 5px 3px;border-radius: 0 7px 7px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)",
     );

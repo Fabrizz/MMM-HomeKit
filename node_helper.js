@@ -9,8 +9,8 @@ const path = require("path");
 const EventEmitter = require("events").EventEmitter;
 const NodeHelper = require("node_helper");
 const hap = require("hap-nodejs");
-const { deepEqual, generateMac, HSVtoRGB } = require("./utils/general");
-const { Switch, LightHSB } = require("./utils/homekit");
+const { deepEqual } = require("./backend/utils");
+const { HandlerList } = require("./backend/BackendDeviceHandler");
 
 const homekitStorage = path.join(__dirname, "/persist");
 hap.HAPStorage.setCustomStoragePath(homekitStorage);
@@ -23,8 +23,11 @@ module.exports = NodeHelper.create({
     this.started = false;
     // Stored Homekit settings
     this.loadedHomekitCfg = undefined;
+    this.accessories = [];
     // Internal event stream to manage devices
     this.events = new EventEmitter();
+
+    this.availableDeviceHandlers = HandlerList;
 
     // Define IDs to match requests (One frontend per server if turned on)
     this.serversideId = Date.now().toString(16);
@@ -37,7 +40,7 @@ module.exports = NodeHelper.create({
         if (this.started) {
           // Check if the configuration options have changed and just the frontend has the changes.
           if (!deepEqual(payload.homekitCfg, this.loadedHomekitConfiguration)) {
-            this.sendSocketNotification("BACKEND_SHOULD_RESTART");
+            this.sendSocketNotification("BACKEND_SHOULD_RESTART", true);
             console.warn(
               "[MMM-HMKT] [Node Helper] >> \x1b[33m%s\x1b[0m",
               "Frontend sent new configurations. Server restart requiered.",
@@ -46,6 +49,7 @@ module.exports = NodeHelper.create({
           }
           // Change to the new frotend ID
           this.frontendId = payload.matchId;
+          this.sendSocketNotification("BACKEND_SHOULD_RESTART", false);
           console.log(
             "[MMM-HMKT] [Node Helper] Frontend reauth: >> \x1b[46m%s\x1b[0m",
             `${this.frontendId}`,
@@ -55,71 +59,41 @@ module.exports = NodeHelper.create({
 
         this.started = true;
         this.configureHomekit(payload);
-        this.sendSocketNotification("HOMEKIT_READY");
         break;
-      case "UPDATE_ACCESSORY":
+      case "HOMEKIT_ACCESSORY_UPDATE":
+        console.log("SWITCH", payload);
         this.events.emit(payload.eventName, payload.eventPayload);
         break;
     }
   },
+  sendMirrorHandlerNotification(eventName, eventPayload) {
+    this.sendSocketNotification("MIRROR_HANDLER_UPDATE", {
+      eventName,
+      eventPayload,
+    });
+  },
 
   configureHomekit(homekitCfg) {
-    let accessories = [];
-    if (homekitCfg.toggleLyrics)
-      accessories.push(this.createLyricsAccessory(homekitCfg.toggleLyrics));
-    if (homekitCfg.accentColor)
-      accessories.push(this.createAccentAccessory(homekitCfg.accentColor));
-    console.log(homekitCfg);
-
-    accessories[0].publish({
-      username: "17:51:07:F4:BC:8A",
-      pincode: "678-90-870",
-      port: 47129,
-      category: 8 /* accessory.getAccessoryCategory() */,
-      addIdentifyingMaterial: true,
-    });
-
-    accessories[1].publish({
-      username: "17:51:07:F4:BC:8C",
-      pincode: "678-90-870",
-      port: 47130,
-      category: 5 /* accessory.getAccessoryCategory() */,
-      addIdentifyingMaterial: true,
-    });
-  },
-
-  createLyricsAccessory(config) {
-    const accUuid = "fabrizz:mm:toggleLyrics";
-    const lyricsToggle = new Switch(config.name, config.serviceName, accUuid);
-    lyricsToggle.on("stateChange", (state) => {
-      this.sendSocketNotification("UPDATE_MIRROR", {
-        eventName: "LYRICS_CHANGED",
-        eventPayload: state,
+    try {
+      this.availableDeviceHandlers.forEach(([key, HandlerClass]) => {
+        if (key in homekitCfg) {
+          this.accessories.push(
+            new HandlerClass(homekitCfg[key], this.events, (x, y) =>
+              this.sendMirrorHandlerNotification(x, y),
+            ),
+          );
+        }
       });
-    });
-    this.events.on("LYRICS_CHANGED", function (state) {
-      if (state) {
-        this.lyricsToggle.turnOn();
-      } else {
-        this.lyricsToggle.turnOff();
-      }
-    });
-    return lyricsToggle.getAccessory();
-  },
-
-  createAccentAccessory(config) {
-    const accUuid = "fabrizz:mm:accentcolor";
-    const accentLight = new LightHSB(config.name, config.serviceName, accUuid);
-    accentLight.on("stateChange", (state) => {
-      this.sendSocketNotification("UPDATE_MIRROR", {
-        eventName: "ACCENT_CHANGED",
-        eventPayload: [
-          state[0],
-          HSVtoRGB(state[1][0] / 360, state[1][1] / 100, state[1][2] / 100),
-        ],
+      this.accessories.forEach((deviceHandler) => {
+        console.log(deviceHandler);
+        deviceHandler
+          .getHomekitAccesory()
+          .publish(deviceHandler.getPublishInfo());
       });
-    });
-
-    return accentLight.getAccessory();
+      this.sendSocketNotification("HOMEKIT_READY");
+    } catch (error) {
+      this.sendSocketNotification("HOMEKIT_LOAD_ERROR");
+      console.log(error);
+    }
   },
 });

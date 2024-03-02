@@ -60,9 +60,7 @@ class Switch {
   getAccessory() {
     return this.accessory;
   }
-  getAccessoryCategory() {
-    return hap.Categories.SWITCH;
-  }
+  category = hap.Categories.SWITCH;
 }
 
 /*************************************************************************** LIGHT HSB */
@@ -136,12 +134,10 @@ class LightHSB {
   }
 
   getState(callback) {
-    console.log(`Light GET state ${this.lightState ? "ON" : "OFF"}`);
     callback(null, this.lightState);
   }
   setState(value, callback) {
     this.lightState = value;
-    console.log(`Light SET state ${this.lightState ? "ON" : "OFF"}`);
     /* On HSB change, onCharacteristic is the only always called */
     this.events.emit("stateChange", [
       this.lightState,
@@ -151,32 +147,26 @@ class LightHSB {
   }
 
   getStateBrightness(callback) {
-    console.log(`Light GET brightness ${this.lightBrightness}`);
     callback(null, this.lightBrightness);
   }
   setStateBrightness(value, callback) {
     this.lightBrightness = value;
-    console.log(`Light SET brightness ${this.lightBrightness}`);
     callback(null);
   }
 
   getStateSaturation(callback) {
-    console.log(`Light GET saturation ${this.lightSaturation}`);
     callback(null, this.lightSaturation);
   }
   setStateSaturation(value, callback) {
     this.lightSaturation = value;
-    console.log(`Light SET saturation ${this.lightSaturation}`);
     callback(null);
   }
 
   getStateHue(callback) {
-    console.log(`Light GET hue ${this.lightHue}`);
     callback(null, this.lightHue);
   }
   setStateHue(value, callback) {
     this.lightHue = value;
-    console.log(`Light SET hue ${this.lightHue}`);
     callback(null);
   }
 
@@ -199,9 +189,7 @@ class LightHSB {
   getAccessory() {
     return this.accessory;
   }
-  getAccessoryCategory() {
-    return hap.Categories.LIGHTBULB;
-  }
+  category = hap.Categories.LIGHTBULB;
 }
 
 /*************************************************************************** LIGHT BRG */
@@ -247,27 +235,20 @@ class LightBRG {
   }
 
   getState(callback) {
-    console.log(`Light GET state ${this.lightState ? "ON" : "OFF"}`);
     callback(null, this.lightState);
   }
   setState(value, callback) {
     this.lightState = value;
-    console.log(`Light SET state ${this.lightState ? "ON" : "OFF"}`);
     /* On HSB change, onCharacteristic is the only always called */
-    this.events.emit("stateChange", [
-      this.lightState,
-      [this.lightHue, this.lightSaturation, this.lightBrightness],
-    ]);
+    this.events.emit("stateChange", [this.lightState, this.lightBrightness]);
     callback(null);
   }
 
   getStateBrightness(callback) {
-    console.log(`Light GET brightness ${this.lightBrightness}`);
     callback(null, this.lightBrightness);
   }
   setStateBrightness(value, callback) {
     this.lightBrightness = value;
-    console.log(`Light SET brightness ${this.lightBrightness}`);
     callback(null);
   }
 
@@ -288,9 +269,7 @@ class LightBRG {
   getAccessory() {
     return this.accessory;
   }
-  getAccessoryCategory() {
-    return hap.Categories.LIGHTBULB;
-  }
+  category = hap.Categories.LIGHTBULB;
 }
 
 module.exports = { Switch, LightHSB, LightBRG };
