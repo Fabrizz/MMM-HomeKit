@@ -1,3 +1,9 @@
 {
-    "": ""
+    "HTML_NOTICE": "Navigate to <mirror:port>/homekit to configure your devices.",
+    "FHANDLER_CREATION_ERROR": "An error ocurred while creating a device handler. Check your configuration!",
+    "CONFIGURATION_SYNC": "Sending devices to backend for initialization...",
+    "DEVICES_CREATED": "Devices and handlers created successfully (Backend).",
+    "BACKEND_RESYNC": "A frontend reload was detected.",
+    "BACKEND_RESYNC_OUTDATED": "Changes to the config.json file were made, restart MM² for them to take effect.",
+    "BACKEND_DEVICE_ERROR": "An error while creating backend devices/handlers/hap occurred. Check your configuration!"
 }

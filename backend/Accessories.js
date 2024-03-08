@@ -9,14 +9,21 @@ const CharacteristicEventTypes = hap.CharacteristicEventTypes;
 
 /*************************************************************************** SWITCH */
 class Switch {
-  constructor(accesoryName, serviceName, accesoryUUIDString) {
+  constructor(version, accessoryName, serviceName, accessoryUUIDString) {
     this.events = new EventEmitter();
-    this.accesoryName = accesoryName;
-    this.accesoryUUID = Uuid.generate(accesoryUUIDString);
+    this.accessoryName = accessoryName;
+    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
     this.serviceName = serviceName;
 
-    this.accessory = new Accessory(this.accesoryName, this.accesoryUUID);
+    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
     this.switchService = new Service.Switch(this.serviceName);
+
+    this.accessory
+      .getService(Service.AccessoryInformation)
+      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
+      .setCharacteristic(Characteristic.Model, "MagicMirror HK Switch")
+      .setCharacteristic(Characteristic.FirmwareRevision, version)
+      .setCharacteristic(Characteristic.SerialNumber, "BASIC-SWITCH");
 
     this.onCharacteristic = this.switchService.getCharacteristic(
       Characteristic.On,
@@ -31,8 +38,14 @@ class Switch {
       this.setState.bind(this),
     );
 
+    this.accessory.on("identify", this.setIdentify.bind(this));
     this.accessory.addService(this.switchService);
     this.switchState = false;
+  }
+
+  setIdentify(paired, callback) {
+    this.events.emit("identify", paired);
+    callback(null);
   }
 
   getState(callback) {
@@ -65,14 +78,20 @@ class Switch {
 
 /*************************************************************************** LIGHT HSB */
 class LightHSB {
-  constructor(accesoryName, serviceName, accesoryUUIDString) {
+  constructor(version, accessoryName, serviceName, accessoryUUIDString) {
     this.events = new EventEmitter();
-    this.accesoryName = accesoryName;
-    this.accesoryUUID = Uuid.generate(accesoryUUIDString);
+    this.accessoryName = accessoryName;
+    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
     this.serviceName = serviceName;
 
-    this.accessory = new Accessory(this.accesoryName, this.accesoryUUID);
+    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
     this.lightService = new Service.Lightbulb(this.serviceName);
+
+    this.accessory
+      .getService(Service.AccessoryInformation)
+      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
+      .setCharacteristic(Characteristic.Model, "MagicMirror HK LightHSB")
+      .setCharacteristic(Characteristic.FirmwareRevision, version);
 
     this.onCharacteristic = this.lightService.getCharacteristic(
       Characteristic.On,
@@ -126,6 +145,11 @@ class LightHSB {
       this.setStateSaturation.bind(this),
     );
 
+    this.accessory.on("advertised", this.setAdvertised.bind(this));
+    this.accessory.on("paired", this.setPaired.bind(this));
+    this.accessory.on("unpaired", this.setUnpaired.bind(this));
+    this.accessory.on("identify", this.setIdentify.bind(this));
+
     this.accessory.addService(this.lightService);
     this.lightState = false;
     this.lightHue = 0;
@@ -143,6 +167,21 @@ class LightHSB {
       this.lightState,
       [this.lightHue, this.lightSaturation, this.lightBrightness],
     ]);
+    callback(null);
+  }
+
+  setPaired() {
+    console.log("LightHSB", "advetised");
+  }
+  setUnpaired() {
+    console.log("LightHSB", "advetised");
+  }
+  setAdvertised() {
+    console.log("LightHSB", "advetised");
+  }
+  setIdentify(paired, callback) {
+    console.log("LightHSB", "identify", paired ? "display" : "search");
+    this.events.emit("identify", paired);
     callback(null);
   }
 
@@ -194,14 +233,20 @@ class LightHSB {
 
 /*************************************************************************** LIGHT BRG */
 class LightBRG {
-  constructor(accesoryName, serviceName, accesoryUUIDString) {
+  constructor(version, accessoryName, serviceName, accessoryUUIDString) {
     this.events = new EventEmitter();
-    this.accesoryName = accesoryName;
-    this.accesoryUUID = Uuid.generate(accesoryUUIDString);
+    this.accessoryName = accessoryName;
+    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
     this.serviceName = serviceName;
 
-    this.accessory = new Accessory(this.accesoryName, this.accesoryUUID);
+    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
     this.lightService = new Service.Lightbulb(this.serviceName);
+
+    this.accessory
+      .getService(Service.AccessoryInformation)
+      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
+      .setCharacteristic(Characteristic.Model, "MagicMirror HK LightBRG")
+      .setCharacteristic(Characteristic.FirmwareRevision, version);
 
     this.onCharacteristic = this.lightService.getCharacteristic(
       Characteristic.On,
@@ -229,9 +274,15 @@ class LightBRG {
       this.setStateBrightness.bind(this),
     );
 
+    this.accessory.on("identify", this.setIdentify.bind(this));
     this.accessory.addService(this.lightService);
     this.lightState = false;
     this.lightBrightness = 100;
+  }
+
+  setIdentify(paired, callback) {
+    this.events.emit("identify", paired);
+    callback(null);
   }
 
   getState(callback) {
@@ -272,4 +323,79 @@ class LightBRG {
   category = hap.Categories.LIGHTBULB;
 }
 
-module.exports = { Switch, LightHSB, LightBRG };
+/*************************************************************************** SWITCH MULTIPLE */
+class SwitchMultiple {
+  constructor(version, accessoryName, accessoryUUIDString, switchList) {
+    this.events = new EventEmitter();
+    this.accessoryName = accessoryName;
+    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
+    this.switchlist = switchList;
+    this.switchServices = [];
+    this.switchStates = [];
+
+    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
+
+    this.accessory
+      .getService(Service.AccessoryInformation)
+      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
+      .setCharacteristic(Characteristic.Model, "MagicMirror HK SwitchMultiple")
+      .setCharacteristic(Characteristic.FirmwareRevision, version);
+
+    this.switchlist.forEach((name, index) => {
+      this.switchStates.push(false);
+      const switchService = new Service.Outlet(name, String(index));
+      const onCharacteristic = switchService.getCharacteristic(
+        Characteristic.On,
+      );
+      onCharacteristic.setValue(false);
+
+      onCharacteristic.on(
+        CharacteristicEventTypes.GET,
+        this.getState.bind(this, index),
+      );
+      onCharacteristic.on(
+        CharacteristicEventTypes.SET,
+        this.setState.bind(this, index),
+      );
+
+      this.switchServices.push([switchService, onCharacteristic]);
+      this.accessory.addService(switchService);
+    });
+
+    this.accessory.on("identify", this.setIdentify.bind(this));
+  }
+
+  setIdentify(paired, callback) {
+    this.events.emit("identify", paired);
+    callback(null);
+  }
+
+  getState(index, callback) {
+    callback(null, this.switchStates[index]);
+  }
+  setState(index, value, callback) {
+    this.switchStates[index] = value;
+    this.events.emit("stateChange", [index, value]);
+    callback(null);
+  }
+
+  turnOn(index) {
+    this.switchStates[index] = true;
+    this.switchServices[index][1].setValue(true);
+  }
+  turnOff(index) {
+    this.switchStates[index] = false;
+    this.switchServices[index][1].setValue(false);
+  }
+
+  on(eventName, listener) {
+    this.events.on(eventName, listener);
+  }
+
+  getAccessory() {
+    return this.accessory;
+  }
+  category = hap.Categories.OUTLET;
+}
+
+module.exports = { Switch, LightHSB, LightBRG, SwitchMultiple };

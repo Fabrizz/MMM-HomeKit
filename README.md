@@ -1,3 +1,5 @@
 # MMM-HomeKit
 ### Help needed!
-As I currently do not own an Iphone (going to borrow one from a friend), I need help testing that this module works correctly with the new HK arch and HK hubs like an AppleTV. Im using HomeAssistant HomeKit bridge to test this module, but testing in an actual HK env is crucial to actually release this module
+I need help testing the module with different Homekit configurations and ["Apple bridges"](https://support.apple.com/es-es/guide/watch/apd1af68cb2a/watchos#:~:text=Allow%20remote%20access,it%20will%20be%20paired%20automatically.). The accessories and handlers work perfectly, the last touches regarding acting on events and other QOL is what is still in development.
+
+Only accessories and backend handlers are finished.

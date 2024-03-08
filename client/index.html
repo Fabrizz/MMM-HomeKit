@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>MMM-HomeKit</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <style>
+    .cardHover {
+      box-shadow: rgb(149 157 165 / 18%) 0 8px 24px;
+      transition: transform 200ms ease-in-out, scale 200ms ease-in-out, box-shadow 200ms ease-in-out;
+    }
+    .cardHover:hover {
+      transform: translateY(-3px);
+      box-shadow: rgb(149 157 165 / 50%) 0 8px 24px;
+      scale: 1.012;
+    }
+    .flex1 {
+      flex: 1;
+    }
+    .overflow {
+      white-space: nowrap;
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="gear" viewBox="0 0 16 16">
+      <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+      <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+    </symbol>
+    <symbol id="qrcode" viewBox="0 0 16 16">
+      <path d="M2 2h2v2H2z"/>
+      <path d="M6 0v6H0V0zM5 1H1v4h4zM4 12H2v2h2z"/>
+      <path d="M6 10v6H0v-6zm-5 1v4h4v-4zm11-9h2v2h-2z"/>
+      <path d="M10 0v6h6V0zm5 1v4h-4V1zM8 1V0h1v2H8v2H7V1zm0 5V4h1v2zM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8zm0 0v1H2V8H1v1H0V7h3v1zm10 1h-1V7h1zm-1 0h-1v2h2v-1h-1zm-4 0h2v1h-1v1h-1zm2 3v-1h-1v1h-1v1H9v1h3v-2zm0 0h3v1h-2v1h-1zm-4-1v1h1v-2H7v1z"/>
+      <path d="M7 12h1v3h4v1H7zm9 2v2h-3v-1h2v-1z"/>
+    </symbol>
+    <symbol id="ethernet" viewBox="0 0 16 16">
+      <path d="M14 13.5v-7a.5.5 0 0 0-.5-.5H12V4.5a.5.5 0 0 0-.5-.5h-1v-.5A.5.5 0 0 0 10 3H6a.5.5 0 0 0-.5.5V4h-1a.5.5 0 0 0-.5.5V6H2.5a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5M3.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m2 0h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zM9.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z"/>
+      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/>
+    </symbol>
+    <symbol id="barcode" viewBox="0 0 16 16">
+        <path d="M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z"/>
+    </symbol>
+    <symbol id="lightbulb" viewBox="0 0 16 16">
+      <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1"/>
+    </symbol>
+    <symbol id="toggles" viewBox="0 0 16 16">
+      <path d="M4.5 9a3.5 3.5 0 1 0 0 7h7a3.5 3.5 0 1 0 0-7zm7 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m-7-14a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5m2.45 0A3.5 3.5 0 0 1 8 3.5 3.5 3.5 0 0 1 6.95 6h4.55a2.5 2.5 0 0 0 0-5zM4.5 0h7a3.5 3.5 0 1 1 0 7h-7a3.5 3.5 0 1 1 0-7"/>
+    </symbol>
+    <symbol id="toggle" viewBox="0 0 16 16">
+      <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+    </symbol>
+    <symbol id="info" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+    </symbol>
+    <symbol id="select" viewBox="0 0 16 16">
+      <path d="M2 10h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1m9-9h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm0-10a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM2 9a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2zm7 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM0 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.354.854a.5.5 0 1 0-.708-.708L3 3.793l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0z"/>
+    </symbol>
+    <symbol id="filetext" viewBox="0 0 16 16">
+      <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/>
+      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
+    </symbol>
+  </svg>
+
+  <div class="container mt-5 mb-4">
+    <div class="position-relative p-5 text-muted bg-body border border-dashed rounded-5">
+      <button type="button"
+        class="position-absolute d-flex top-0 end-0 p-3 btn m-3 bg-secondary bg-opacity-10 rounded-pill"
+        aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi">
+          <use xlink:href="#gear"></use>
+        </svg>
+      </button>
+      <div class="mb-3 d-flex align-items-center gap-2">
+        <img src="./assets/homekit-logo.png" alt="" class="shadow-lg rounded-3" height="54">
+      </div>
+      <h1 class="text-body-emphasis">MMM-HomeKit</h1>
+      <h6 class="text-body-emphasis">Configuration helper</h6>
+      <p class="col-lg-7 mb-4">
+        This faded back jumbotron is useful for placeholder content. It's also a great way to add a bit of context to a
+        page or section when no content is available and to encourage visitors to take a specific action.
+      </p>
+      <div class="d-flex mt-3 gap-2" style="margin-bottom: -0.25rem">
+        <button type="button" class="btn btn-primary d-flex align-items-center gap-2 t-start">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+            <use xlink:href="#select"></use>
+          </svg>
+          Add devices to Homekit
+        </button>
+        <button type="button" class="btn btn-link d-flex align-items-center gap-2 t-start">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+            <use xlink:href="#filetext"></use>
+          </svg>
+          View module documentation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container py-2">
+    <h3 style="margin-bottom: 0px;">Devices loaded:</h3>
+    <div id="placeholder-card">
+      <div class="alert alert-warning mt-3 rounded-4 p-4" role="alert">
+        <h4 class="alert-heading d-flex align-items-center gap-2">
+          <div class="spinner-border" aria-hidden="true"></div>
+          <span>Waiting for devices to load...</span>
+        </h4>
+        <p style="margin-bottom: -5px;">Is MagicMirror² loaded correctly? Check if the module frontend loaded correctly!.</p>
+      </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g-3 mt-1" id="appendable-card"></div>
+  </div>
+
+  <div class="container py-2 mt-4">
+    <h3>Received Data:</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Timestamp</th>
+          <th scope="col">Payload</th>
+        </tr>
+      </thead>
+      <tbody id="appendable-messages">
+
+      </tbody>
+    </table>
+  </div>
+
+  <template id="card-col-template">
+      <div class="col">
+        <div class="card rounded-4 p-2 cardHover border-light position-relative">
+          <div class="card-body">
+            <h5 class="card-title d-flex align-items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                <use class="t-icon" xlink:href="#gear"></use>
+              </svg>
+              <span class="flex1 t-name"></span>
+              <span class="badge t-badge" style="--bs-badge-font-size: 0.7rem !important;">Created</span>
+            </h5>
+            <p class="card-text t-description"></p>
+            <div class="d-flex justify-content-between mt-3" style="margin-bottom: -2px;">
+              <button type="button" class="btn btn-outline-primary me-auto d-flex align-items-center gap-2 t-start">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#info"></use>
+                </svg>
+                View device and QR
+              </button>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item t-pincode" style="font-weight: 500;"></li>
+              </ul>
+            </div>
+          </div>
+          <div style="background-color: transparent; height: 4px; width: 88%; top: -2px; left: 6%;" class="rounded-3 position-absolute"></div>
+        </div>
+      </div>
+  </template>
+
+  <template id="message-template">
+    <tr class="t-row">
+      <th scope="row" class="t-type"></th>
+      <td class="t-ts"></td>
+      <td class="t-payload"></td>
+    </tr>
+  </template>
+</body>
+<script src="./logic.js"></script>
+</html>

@@ -28,7 +28,7 @@ Module.register("MMM-HomeKit", {
       serviceName: "TR(Screen)" | <str>,
     } | false */
 
-    pageChanges: false,
+    pageControl: true,
     /*
     pageChanges: {
       type: "MMM-Pages" | "MMM-Remote-Control" | false
@@ -43,13 +43,18 @@ Module.register("MMM-HomeKit", {
       name: "TR(Magic Mirror)" | <str>,
       serviceName: "TR(Lyrics)" | <str>,
     } | false */
+
+    // In special use cases where a frontend needs to take over other you can disable
+    // the id matching for the frontend, so "multiple" frontends can talk to the module even if not supported
+    matchBackendUUID: false,
   },
 
   /******************************************************** MM2 Loaders */
   getScripts: function () {
     let files = [
       this.file("frontend/MirrorDeviceHandlers.js"),
-      this.file("frontend/HomekitEventEmmiter.js"),
+      this.file("frontend/HomekitDomBuilder.js"),
+      this.file("frontend/HomekitUtils.js"),
     ];
     return files;
   },
@@ -64,11 +69,16 @@ Module.register("MMM-HomeKit", {
   },
   getDom: function () {
     const basicDom = document.createElement("div");
-    const moduleData = document.createComment("MMM-HMKT Version: 1.0.0");
+    basicDom.id = "HMKT-NOTIFICATIONS";
+    const moduleData = document.createComment(
+      `MMM-HMKT Version: ${this.version}`,
+    );
     const moduleVersion = document.createComment(
       "MMM-HomeKit by Fabrizz | https://github.com/Fabrizz/MMM-HomeKit",
     );
-    const moduleMessage = document.createComment("[!] DVC_CONFIG_NOTICE [!]");
+    const moduleMessage = document.createComment(
+      `[!] ${this.translate("HTML_NOTICE")} [!]`,
+    );
     basicDom.append(moduleData, moduleVersion, moduleMessage);
     return basicDom;
   },
@@ -76,9 +86,10 @@ Module.register("MMM-HomeKit", {
   /******************************************************** Start */
   start: function () {
     this.logBadge();
-    this.moduleColor = "#FFE780";
-    this.version = "0.1.0";
-    this.frontendId = Date.now().toString(16);
+    this.version = "0.3.0";
+    this.frontendId = this.config.matchBackendUUID
+      ? Date.now().toString(16)
+      : "ABC";
 
     this.thirdPartyNotificationsListenTo = [];
     this.featureHandlers = [];
@@ -87,6 +98,15 @@ Module.register("MMM-HomeKit", {
     this.devicesEventStream = new HomekitEventEmmiter();
     this.availableFeatureHandlers = HKAvailableFeatureHandlers;
     /* eslint-enable no-undef */
+
+    const loggers = {
+      debug: this.logDebug,
+      info: this.logInfo,
+      warnBasic: this.logWarnBasic,
+      warn: this.logWarn,
+      error: this.logError,
+      shouldLog: true,
+    };
 
     // Dinamically add handlers and configurations
     this.availableFeatureHandlers.forEach(([key, FeatureHandler]) => {
@@ -98,7 +118,7 @@ Module.register("MMM-HomeKit", {
             (x, y) => this.translate(x, y),
             (x, y) => this.sendNotification(x, y),
             (x, y) => this.sendAccesoryNotification(x, y),
-            false,
+            loggers,
           );
           this.thirdPartyNotificationsListenTo.push(...Handler.listenTo());
           this.featureHandlersConfiguration[key] = Handler.configuration();
@@ -114,11 +134,14 @@ Module.register("MMM-HomeKit", {
   notificationReceived: function (notification, payload) {
     switch (notification) {
       case "ALL_MODULES_STARTED":
-        this.sendSocketNotification(
-          "HOMEKIT_START",
+        this.sendSocketNotification("HOMEKIT_START", {
+          homekitCfg: this.featureHandlersConfiguration,
+          frontendId: this.frontendId,
+        });
+        this.logInfo(
+          this.translate("CONFIGURATION_SYNC"),
           this.featureHandlersConfiguration,
         );
-        this.logInfo("CONFIGURATION_SYNC", this.featureHandlersConfiguration);
         break;
 
       default:
@@ -131,19 +154,23 @@ Module.register("MMM-HomeKit", {
   socketNotificationReceived: function (notification, payload) {
     switch (notification) {
       case "HOMEKIT_READY":
-        this.logInfo("DEVICES_CREATED");
+        this.logInfo(this.translate("DEVICES_CREATED"), payload);
         break;
 
       case "BACKEND_SHOULD_RESTART":
         if (payload) {
-          this.logError("BACKEND_RESYNC_OUTDATED.");
+          this.logError(this.translate("BACKEND_RESYNC_OUTDATED"));
         } else {
-          this.logWarnBasic("BACKEND_RESYNC");
+          this.logWarnBasic(this.translate("BACKEND_RESYNC"));
         }
         break;
 
+      case "HOMEKIT_LOAD_ERROR":
+        this.logError(this.translate("BACKEND_DEVICE_ERROR"));
+        break;
+
       case "MIRROR_HANDLER_UPDATE":
-        console.log("UPDATE_MIRROR", payload);
+        console.log(payload);
         this.devicesEventStream.emit(payload.eventName, payload.eventPayload);
         break;
     }
@@ -157,6 +184,16 @@ Module.register("MMM-HomeKit", {
   },
 
   /******************************************************** Console Logs */
+  logDebug(str, ...arg) {
+    console.debug(
+      `%c· MMM-HomeKit %c %c DBUG %c ${str}`,
+      "background-color:#FFE780;color:black;border-radius:0.5em",
+      "",
+      "background-color:#293f45;color:white;",
+      "",
+      ...arg,
+    );
+  },
   logInfo(str, ...arg) {
     console.info(
       `%c· MMM-HomeKit %c %c INFO %c ${str}`,

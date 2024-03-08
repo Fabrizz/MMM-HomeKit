@@ -6,7 +6,7 @@ class HKToggleLyricsHandler {
     translate,
     sendNotification,
     sendToBackend,
-    shouldLog,
+    loggers,
   ) {
     this.toggleLyricsState = undefined;
     this.notificationsListenTo = ["LYRICS_STATUS"];
@@ -64,7 +64,7 @@ class HKAccentColorHandler {
     translate,
     sendNotification,
     sendToBackend,
-    shouldLog,
+    loggers,
   ) {
     this.root = document.querySelector(":root");
     this.notificationsListenTo = ["HK_ACCENTCOLOR_GET"];
@@ -105,12 +105,10 @@ class HKAccentColorHandler {
         } else {
           sendNotification("HK_ACCENTCOLOR_SET", false);
         }
-        if (shouldLog) {
+        if (loggers.shouldLog) {
           const color = `rgb(${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]})`;
-          console.debug(
-            `%c· MMM-HomeKit %c %c     %c (${this.accentColorState}) RGB: ${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]}`,
-            "background-color:#FFE780;color:black;border-radius:0.5em",
-            "",
+          loggers.debug(
+            `%c     %c (${this.accentColorState}) RGB: ${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]}`,
             `background-color:${color};color:white;border-radius:0.8em;`,
             "",
             payload,
@@ -135,12 +133,11 @@ class HKScreenControlHandler {
     translate,
     sendNotification,
     sendToBackend,
-    shouldLog,
+    loggers,
   ) {
     this.screenControlState = undefined;
     this.notificationsListenTo = [];
 
-    //// Configuration to send to the backend, should match node_helper configuration
     this.deviceConfig = {
       name:
         configObject.name && typeof configObject.name === "string"
@@ -149,11 +146,46 @@ class HKScreenControlHandler {
       serviceName:
         configObject.serviceName && typeof configObject.serviceName === "string"
           ? configObject.serviceName.substring(0, 16)
-          : translate("HK_SRVC_LYRICS"),
+          : translate("HK_SRVC_SCREEN"),
     };
 
-    //// Backend connector for device
-    devicesEventStream.on("CONTROL_SCREEN", (payload) => {
+    devicesEventStream.on("SCREEN_CONTROL", (payload) => {
+      console.log(payload);
+    });
+  }
+  configuration() {
+    return this.deviceConfig;
+  }
+  listenTo() {
+    return this.notificationsListenTo;
+  }
+}
+
+/** HKPageControllHandler */
+class HKPageControllHandler {
+  constructor(
+    configObject,
+    devicesEventStream,
+    translate,
+    sendNotification,
+    sendToBackend,
+    loggers,
+  ) {
+    this.currentPage = undefined;
+    this.notificationsListenTo = [];
+
+    this.deviceConfig = {
+      name:
+        configObject.name && typeof configObject.name === "string"
+          ? configObject.name.substring(0, 16)
+          : translate("HK_ACCS_BASE"),
+      serviceName:
+        configObject.serviceName && typeof configObject.serviceName === "string"
+          ? configObject.serviceName.substring(0, 16)
+          : translate("HK_SRVC_PAGE"),
+    };
+
+    devicesEventStream.on("PAGE_CONTROL", (payload) => {
       console.log(payload);
     });
   }
@@ -170,4 +202,5 @@ HKAvailableFeatureHandlers = [
   ["toggleLyrics", HKToggleLyricsHandler],
   ["accentColor", HKAccentColorHandler],
   ["screenControl", HKScreenControlHandler],
+  ["pageControl", HKPageControllHandler],
 ];
