@@ -28,6 +28,20 @@
       white-space: nowrap;
       overflow-x: hidden;
     }
+    .identify-animation .line {
+      animation: notifyBackground 2000ms ease-in-out 3;
+    }
+    @keyframes notifyBackground {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: var(--bs-primary); }
+    }
+    .intermitent .col .card {
+      animation: intermitent 2000ms ease-in-out 3;
+    }
+    @keyframes intermitent {
+      0%, 100% { box-shadow: rgb(149 157 165 / 18%) 0 8px 24px; }
+      50% { box-shadow: #0d6dfdc7 0 0px 3px; }
+    }
   </style>
 </head>
 
@@ -71,13 +85,49 @@
       <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/>
       <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
     </symbol>
+    <symbol id="boxarrowup" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/>
+      <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+    </symbol>
+    <symbol id="boxarrowdown" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z"/>
+      <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z"/>
+    </symbol>
+    <symbol id="person-gear" viewBox="0 0 16 16">
+      <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
+    </symbol>
+    <symbol id="x" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </symbol>
+    <symbol id="code" viewBox="0 0 16 16">
+      <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0"/>
+    </symbol>
+    <symbol id="fabrizz" viewBox="0 0 231 40">
+      <path d="M61.4171 6.74286V20.3429H76.16V22.2857H61.4171V37.1429H59.0629V4.8H78.4457V6.74286H61.4171Z" fill="#020B0D"/>
+      <path d="M99.9903 25.3943L93.4075 9.05143C93.1789 8.51809 92.958 7.87809 92.7446 7.13143C92.6532 7.49714 92.5542 7.84762 92.4475 8.18286C92.3408 8.50286 92.2265 8.8 92.1046 9.07428L85.5218 25.3943H99.9903ZM107.145 37.1429H105.339C105.126 37.1429 104.95 37.0895 104.813 36.9829C104.676 36.861 104.569 36.7086 104.493 36.5257L100.699 27.1314H84.8132L81.0189 36.5257C80.958 36.6933 80.8513 36.8381 80.6989 36.96C80.5465 37.0819 80.3637 37.1429 80.1503 37.1429H78.3675L91.6018 4.8H93.9103L107.145 37.1429Z" fill="#020B0D"/>
+      <path d="M123.203 35.2686C126.037 35.2686 128.178 34.659 129.626 33.44C131.089 32.2057 131.82 30.4762 131.82 28.2514C131.82 27.2305 131.622 26.3162 131.226 25.5086C130.845 24.6857 130.289 23.9924 129.557 23.4286C128.826 22.8495 127.927 22.4076 126.86 22.1029C125.793 21.7981 124.582 21.6457 123.226 21.6457H115.089V35.2686H123.203ZM115.089 6.65143V19.9314H122.083C123.576 19.9314 124.849 19.741 125.9 19.36C126.967 18.979 127.835 18.4762 128.506 17.8514C129.191 17.2267 129.694 16.5181 130.014 15.7257C130.334 14.9333 130.494 14.1181 130.494 13.28C130.494 11.101 129.801 9.45524 128.414 8.34285C127.043 7.21524 124.917 6.65143 122.037 6.65143H115.089ZM122.037 4.8C123.881 4.8 125.481 4.98286 126.837 5.34857C128.193 5.71428 129.313 6.25524 130.197 6.97143C131.081 7.67238 131.736 8.53333 132.163 9.55429C132.59 10.5752 132.803 11.7333 132.803 13.0286C132.803 13.8819 132.65 14.7048 132.346 15.4971C132.056 16.2895 131.63 17.021 131.066 17.6914C130.517 18.3619 129.831 18.9486 129.009 19.4514C128.201 19.939 127.271 20.3124 126.22 20.5714C128.765 20.9371 130.715 21.7829 132.071 23.1086C133.443 24.419 134.129 26.1486 134.129 28.2971C134.129 29.6686 133.885 30.9029 133.397 32C132.909 33.0971 132.201 34.0267 131.271 34.7886C130.342 35.5505 129.199 36.1371 127.843 36.5486C126.487 36.9448 124.948 37.1429 123.226 37.1429H112.734V4.8H122.037Z" fill="#020B0D"/>
+      <path d="M149.801 20.7771C151.233 20.7771 152.513 20.6095 153.641 20.2743C154.784 19.9238 155.744 19.4286 156.521 18.7886C157.313 18.1486 157.915 17.379 158.327 16.48C158.738 15.5809 158.944 14.5676 158.944 13.44C158.944 11.139 158.19 9.43238 156.681 8.32C155.188 7.20762 153.001 6.65143 150.121 6.65143H144.201V20.7771H149.801ZM164.155 37.1429H162.144C161.885 37.1429 161.664 37.1048 161.481 37.0286C161.313 36.9371 161.153 36.7771 161.001 36.5486L150.624 23.4286C150.502 23.261 150.372 23.1162 150.235 22.9943C150.113 22.8724 149.969 22.781 149.801 22.72C149.649 22.6438 149.458 22.5905 149.23 22.56C149.016 22.5295 148.75 22.5143 148.43 22.5143H144.201V37.1429H141.847V4.8H150.121C153.839 4.8 156.62 5.52381 158.464 6.97143C160.323 8.40381 161.252 10.5143 161.252 13.3029C161.252 14.5371 161.039 15.6648 160.612 16.6857C160.186 17.7067 159.569 18.6057 158.761 19.3829C157.969 20.1448 157.001 20.7695 155.858 21.2571C154.731 21.7448 153.458 22.0724 152.041 22.24C152.407 22.4686 152.734 22.7733 153.024 23.1543L164.155 37.1429Z" fill="#020B0D"/>
+      <path d="M172.197 37.1429H169.843V4.8H172.197V37.1429Z" fill="#020B0D"/>
+      <path d="M202.769 5.6C202.769 5.88952 202.662 6.2019 202.449 6.53714L181.923 35.2H202.609V37.1429H178.791V36.2971C178.791 36.1295 178.814 35.9848 178.86 35.8629C178.921 35.7257 178.99 35.5962 179.066 35.4743L199.637 6.74286H179.386V4.8H202.769V5.6Z" fill="#020B0D"/>
+      <path d="M230.319 5.6C230.319 5.88952 230.212 6.2019 229.999 6.53714L209.473 35.2H230.159V37.1429H206.341V36.2971C206.341 36.1295 206.364 35.9848 206.41 35.8629C206.471 35.7257 206.539 35.5962 206.616 35.4743L227.187 6.74286H206.936V4.8H230.319V5.6Z" fill="#020B0D"/>
+      <path d="M40 8C40 12.4183 36.4183 16 32 16C27.5817 16 24 12.4183 24 8C24 3.58172 27.5817 0 32 0C36.4183 0 40 3.58172 40 8Z" fill="#020B0D"/>
+      <path d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8Z" fill="#020B0D"/>
+      <path d="M16 32C16 36.4183 12.4183 40 8 40C3.58172 40 0 36.4183 0 32C0 27.5817 3.58172 24 8 24C12.4183 24 16 27.5817 16 32Z" fill="#020B0D"/>
+    </symbol>
+    <symbol id="arrow-circle-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+    </symbol>
   </svg>
 
-  <div class="container mt-5 mb-4">
-    <div class="position-relative p-5 text-muted bg-body border border-dashed rounded-5">
+  <a class="container mt-4 d-flex justify-content-center px-2" target="_blank" href="https://fabriz.co">
+    <svg xmlns="http://www.w3.org/2000/svg" height="22" width="120" fill="currentColor">
+       <use xlink:href="#fabrizz"></use>
+    </svg>
+  </a>
+  <div class="container mt-4 mb-3">
+    <div class="position-relative p-5 text-muted bg-body border border-dashed rounded-5" style="user-select: none;">
       <button type="button"
-        class="position-absolute d-flex top-0 end-0 p-3 btn m-3 bg-secondary bg-opacity-10 rounded-pill"
-        aria-label="Close">
+        class="position-absolute d-flex top-0 end-0 p-3 btn m-3 bg-secondary bg-opacity-10 rounded-pill">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi">
           <use xlink:href="#gear"></use>
         </svg>
@@ -87,23 +137,26 @@
       </div>
       <h1 class="text-body-emphasis">MMM-HomeKit</h1>
       <h6 class="text-body-emphasis">Configuration helper</h6>
-      <p class="col-lg-7 mb-4">
-        This faded back jumbotron is useful for placeholder content. It's also a great way to add a bit of context to a
-        page or section when no content is available and to encourage visitors to take a specific action.
+      <p class="col-lg-8 mb-4">
+        This page will help you adding the virtual devices to Homekit. You should see your devices below, click any card to see the device data and HK code. To restart the Homekit information, click on the <span style="display: inline-flex; width: 1rem; height: 1rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" style="margin-top: 2px;">
+          <use xlink:href="#gear"></use>
+        </svg>
+        </span>.
       </p>
-      <div class="d-flex mt-3 gap-2" style="margin-bottom: -0.25rem">
-        <button type="button" class="btn btn-primary d-flex align-items-center gap-2 t-start">
+      <div class="d-flex mt-3 gap-2 flex-wrap" style="margin-bottom: -0.25rem">
+        <button type="button" class="btn btn-primary d-flex align-items-center gap-2 t-start text-nowrap rounded-4 px-3" data-bs-toggle="modal" data-bs-target="#ctaModal">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
             <use xlink:href="#select"></use>
           </svg>
           Add devices to Homekit
         </button>
-        <button type="button" class="btn btn-link d-flex align-items-center gap-2 t-start">
+        <a type="button" href="https://github.com/Fabrizz/MMM-HomeKit" target="_blank" class="btn rounded-4 btn-outline-primary d-flex align-items-center gap-2 t-start text-nowrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
             <use xlink:href="#filetext"></use>
           </svg>
           View module documentation
-        </button>
+        </a>
       </div>
     </div>
   </div>
@@ -124,56 +177,215 @@
 
   <div class="container py-2 mt-4">
     <h3>Received Data:</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Type</th>
-          <th scope="col">Timestamp</th>
-          <th scope="col">Payload</th>
-        </tr>
-      </thead>
-      <tbody id="appendable-messages">
+  </div>
+    <div class="px-4 mb-5" style="overflow-x: auto; max-width: 1600px; margin: auto;">
+      <table class="table" style="white-space: nowrap;">
+        <thead>
+          <tr>
+            <th scope="col" style="min-width: 200px;">Type</th>
+            <th scope="col" style="min-width: 140px;">Timestamp</th>
+            <th scope="col" style="min-width: 200px;">Payload</th>
+          </tr>
+        </thead>
+        <tbody id="appendable-messages"></tbody>
+      </table>
+    </div>
 
-      </tbody>
-    </table>
+  <div class="modal fade" id="deviceModal" aria-labelledby="deviceModalLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg modal-fullscreen-lg-down justify-content-center flex-column" id="deviceModalTarget"></div>
+  </div>
+
+  <div class="modal fade" id="ctaModal" tabindex="-1" aria-labelledby="ctaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content rounded-5">
+        <div class="modal-body">
+          <div class="mx-3 py-2">
+            <h4 class="mb-3" id="ctaModalLabel">Adding devices to Homekit</h4>
+            <p style="padding: 0; margin: 0;">If you can see this message, the module has loaded correctly! Click on any of the device cards to add them to Homekit.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary px-3 d-flex justify-content-center align-items-center rounded-4 gap-2" data-bs-dismiss="modal">
+            <span>Lets go</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+              <use xlink:href="#arrow-circle-right"></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <template id="card-col-template">
       <div class="col">
-        <div class="card rounded-4 p-2 cardHover border-light position-relative">
-          <div class="card-body">
+        <div class="card rounded-5 p-2 cardHover border-light position-relative" style="height: 100%;">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title d-flex align-items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
                 <use class="t-icon" xlink:href="#gear"></use>
               </svg>
-              <span class="flex1 t-name"></span>
-              <span class="badge t-badge" style="--bs-badge-font-size: 0.7rem !important;">Created</span>
+              <span class="flex1">
+                <span class="t-name"></span>
+                <span class="t-mat fw-light" style="font-size: 0.9rem !important;"></span>
+              </span>
+              <span style="font-size: 1rem !important;" class="t-badge"></span>
             </h5>
-            <p class="card-text t-description"></p>
-            <div class="d-flex justify-content-between mt-3" style="margin-bottom: -2px;">
-              <button type="button" class="btn btn-outline-primary me-auto d-flex align-items-center gap-2 t-start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-                  <use xlink:href="#info"></use>
-                </svg>
-                View device and QR
-              </button>
-              <ul class="list-group list-group-horizontal">
-                <li class="list-group-item t-pincode" style="font-weight: 500;"></li>
+            <p class="card-text t-description p-1" style="margin-bottom: 0.52rem !important; flex: 1;"></p>
+            <div class="d-flex" style="margin-bottom: -2px;">
+              <ul class="list-group list-group-horizontal text-nowrap me-auto" style="z-index: 10;">
+                <li class="list-group-item t-pincode text-nowrap rounded-4" style="font-weight: 500;"></li>
               </ul>
+              <div class="d-flex gap-2">
+              <a type="button" target="_blank" class="t-btn-docs btn btn-outline-primary d-flex align-items-center gap-2 t-start rounded-4" style="z-index: 10;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#filetext"></use>
+                </svg>
+              </a>
+                <button type="button" class="t-btn-info btn btn-outline-primary d-flex align-items-center gap-2 t-start rounded-4 stretched-link" data-bs-toggle="modal" data-bs-target="#deviceModal">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                    <use xlink:href="#info"></use>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
-          <div style="background-color: transparent; height: 4px; width: 88%; top: -2px; left: 6%;" class="rounded-3 position-absolute"></div>
+          <div style="background-color: transparent; height: 4px; width: 88%; top: -2px; left: 6%;" class="line rounded-3 position-absolute"></div>
         </div>
       </div>
   </template>
 
+  <template id="device-modal-template">
+    <div class="modal-content rounded-5">
+      <div style="background-color: transparent; height: 4px; width: 88%; left: 6%; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;" class="line position-absolute"></div>
+      <div class="modal-body">
+        <div class="mx-3 py-2">
+          <h5 class="t-displayn" style="margin: 0;" id="deviceModalLabel"></h5>
+          <p class="t-description fw-light" style="margin: 0;"></p>
+        </div>
+        <div class="d-flex justify-content-center gap-4 align-items-center mt-4" style="margin: auto;">
+          <div class="t-hkcode px-2" style="width: 9.4rem;"></div>
+          <ul class="list-group list-group-flush rounded-3" style="min-width: 200px;">
+            <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+                <use xlink:href="#barcode"></use>
+              </svg>
+              <div>
+                <div class="fw-light">Pincode</div>
+                <span class="t-pincode"></span>
+              </div>
+            </li>
+            <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+                <use xlink:href="#person-gear"></use>
+              </svg>
+              <div>
+                <div class="fw-light">Username</div>
+                <span class="t-username"></span>
+              </div>
+            </li>
+            <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+                <use xlink:href="#ethernet"></use>
+              </svg>
+              <div>
+                <div class="fw-light">Port</div>
+                <span class="t-port"></span>
+              </div>
+            </li>
+            <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+                <use xlink:href="#code"></use>
+              </svg>
+              <div>
+                <div class="fw-light">Setup URI</div>
+                <span class="t-uri"></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="mt-4 mx-3">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th class="fw-light">Integration by</th>
+                <td class="fw-semibold">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="100" fill="currentColor">
+                    <use xlink:href="#fabrizz"></use>
+                  </svg>
+                </td>
+              </tr>
+              <tr>
+                <th class="fw-light">State</th>
+                <td class="fw-semibold t-state"></td>
+              </tr>
+              <tr>
+                <th class="fw-light">Device</th>
+                <td class="fw-semibold t-device"></td>
+              </tr>
+              <tr>
+                <th class="fw-light">Device Handler</th>
+                <td class="fw-semibold t-handler"></td>
+              </tr>
+              <tr>
+                <th class="fw-light">Device Notification</th>
+                <td class="fw-semibold t-notification"></td>
+              </tr>
+              <tr>
+                <th class="fw-light">Identifying Material</th>
+                <td class="fw-semibold t-idmaterial"></td>
+              </tr>
+              <tr>
+                <th class="fw-light">Category</th>
+                <td class="fw-semibold t-category"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer px-3">
+          <a type="button" target="_blank" class="t-docs btn btn-outline-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+              <use xlink:href="#filetext"></use>
+            </svg>
+            Documentation
+          </a>
+          <button type="button" class="btn btn-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap d-none d-sm-block" data-bs-dismiss="modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+              <use xlink:href="#gear"></use>
+            </svg>
+            General configuration
+          </button>
+          <button type="button" class="btn btn-secondary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap" data-bs-dismiss="modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+              <use xlink:href="#x"></use>
+            </svg>
+            Close
+          </button>
+      </div>
+    </div>
+     <div class="text-center lead p-1 d-none d-lg-block" style="font-size: 0.86rem !important; color: white;">
+      <span class="t-manufacturer"></span> |
+      <span class="t-model"></span> |
+      <span class="t-serial"></span> |
+      <span class="t-version"></span>
+    </div>
+  </template>
+
   <template id="message-template">
     <tr class="t-row">
-      <th scope="row" class="t-type"></th>
+      <th scope="row" class="d-flex align-items-center gap-2">
+        <span class="t-type"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+          <use class="t-icon" xlink:href="#info"></use>
+        </svg>
+      </th>
       <td class="t-ts"></td>
       <td class="t-payload"></td>
     </tr>
   </template>
+
 </body>
+<script src="./qrcode.js"></script>
 <script src="./logic.js"></script>
 </html>

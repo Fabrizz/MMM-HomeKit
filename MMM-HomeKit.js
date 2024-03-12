@@ -12,7 +12,9 @@ Module.register("MMM-HomeKit", {
   defaults: {
     name: "MMM-HomeKit",
 
-    accentColor: true,
+    accentColor: {
+      name: "MM Accent color",
+    },
     /*
     accentColor: {
       type: "internal", | "CSS var(x)"
@@ -37,7 +39,9 @@ Module.register("MMM-HomeKit", {
       serviceName: "TR(Page)" | <str>,
     } | false */
 
-    toggleLyrics: true,
+    toggleLyrics: {
+      name: "MMM lyrics",
+    },
     /*
     toggleLyrics: {
       name: "TR(Magic Mirror)" | <str>,

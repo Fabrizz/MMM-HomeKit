@@ -127,6 +127,12 @@ module.exports = NodeHelper.create({
     }
   },
   sendMirrorHandlerNotification(eventName, eventPayload) {
+    if (eventPayload.type === "device-event" && !eventPayload.paired) {
+      let device = Object.keys(this.accessoryInformation).filter(
+        (x) => this.accessoryInformation[x].notificationName === eventName,
+      )[0];
+      this.accessoryInformation[device]["state"] = eventPayload.subtype;
+    }
     this.sendEventWebClient({
       type: "toFrontend",
       data: { payload: { eventName, eventPayload } },
@@ -168,6 +174,8 @@ module.exports = NodeHelper.create({
               DeviceHandler.getHomekitAccesory().publish(publishInfo);
               const displayName =
                 DeviceHandler.getHomekitAccesory().displayName;
+              const accessoryInfo =
+                DeviceHandler.getHomekitAccessoryInformation();
               const setupURI = DeviceHandler.getHomekitAccesory().setupURI();
 
               console.info(
@@ -187,7 +195,9 @@ module.exports = NodeHelper.create({
                     displayName,
                     ...publishInfo,
                     ...handlerData,
+                    ...accessoryInfo,
                     pairingQrSvg,
+                    state: "created",
                   };
                   this.accessories.push(DeviceHandler);
                   resolve();
@@ -203,6 +213,8 @@ module.exports = NodeHelper.create({
                       deviceHandlerName,
                       displayName,
                       ...publishInfo,
+                      ...accessoryInfo,
+                      state: "created",
                     });
                   this.accessories.push(DeviceHandler);
                   resolve();

@@ -11,19 +11,34 @@ const CharacteristicEventTypes = hap.CharacteristicEventTypes;
 class Switch {
   constructor(version, accessoryName, serviceName, accessoryUUIDString) {
     this.events = new EventEmitter();
-    this.accessoryName = accessoryName;
-    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
-    this.serviceName = serviceName;
+    this.ACCESORY_NAME = accessoryName;
+    this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
+    this.SERVICE_NAME = serviceName;
+    this.ACCESORY_INF = {
+      manufacturer: "Fabrizz",
+      model: "MagicMirror HK Switch",
+      version,
+      serialNumber: "BASIC:SWITCH",
+    };
 
-    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
-    this.switchService = new Service.Switch(this.serviceName);
+    this.accessory = new Accessory(this.ACCESORY_NAME, this.ACCESSORY_UUID);
+    this.switchService = new Service.Switch(this.SERVICE_NAME);
 
     this.accessory
       .getService(Service.AccessoryInformation)
-      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
-      .setCharacteristic(Characteristic.Model, "MagicMirror HK Switch")
-      .setCharacteristic(Characteristic.FirmwareRevision, version)
-      .setCharacteristic(Characteristic.SerialNumber, "BASIC-SWITCH");
+      .setCharacteristic(
+        Characteristic.Manufacturer,
+        this.ACCESORY_INF.manufacturer,
+      )
+      .setCharacteristic(Characteristic.Model, this.ACCESORY_INF.model)
+      .setCharacteristic(
+        Characteristic.FirmwareRevision,
+        this.ACCESORY_INF.version,
+      )
+      .setCharacteristic(
+        Characteristic.SerialNumber,
+        this.ACCESORY_INF.serialNumber,
+      );
 
     this.onCharacteristic = this.switchService.getCharacteristic(
       Characteristic.On,
@@ -38,11 +53,24 @@ class Switch {
       this.setState.bind(this),
     );
 
+    this.accessory.on("advertised", this.setAdvertised.bind(this));
+    this.accessory.on("paired", this.setPaired.bind(this));
+    this.accessory.on("unpaired", this.setUnpaired.bind(this));
     this.accessory.on("identify", this.setIdentify.bind(this));
+
     this.accessory.addService(this.switchService);
     this.switchState = false;
   }
 
+  setPaired() {
+    this.events.emit("paired");
+  }
+  setUnpaired() {
+    this.events.emit("unpaired");
+  }
+  setAdvertised() {
+    this.events.emit("advertised");
+  }
   setIdentify(paired, callback) {
     this.events.emit("identify", paired);
     callback(null);
@@ -73,6 +101,9 @@ class Switch {
   getAccessory() {
     return this.accessory;
   }
+  getAccessoryInformation() {
+    return this.ACCESORY_INF;
+  }
   category = hap.Categories.SWITCH;
 }
 
@@ -80,18 +111,34 @@ class Switch {
 class LightHSB {
   constructor(version, accessoryName, serviceName, accessoryUUIDString) {
     this.events = new EventEmitter();
-    this.accessoryName = accessoryName;
-    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
-    this.serviceName = serviceName;
+    this.ACCESORY_NAME = accessoryName;
+    this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
+    this.SERVICE_NAME = serviceName;
+    this.ACCESORY_INF = {
+      manufacturer: "Fabrizz",
+      model: "MagicMirror HK LightHSB",
+      version,
+      serialNumber: "BASIC:LIGHTHSB",
+    };
 
-    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
-    this.lightService = new Service.Lightbulb(this.serviceName);
+    this.accessory = new Accessory(this.ACCESORY_NAME, this.ACCESSORY_UUID);
+    this.lightService = new Service.Lightbulb(this.SERVICE_NAME);
 
     this.accessory
       .getService(Service.AccessoryInformation)
-      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
-      .setCharacteristic(Characteristic.Model, "MagicMirror HK LightHSB")
-      .setCharacteristic(Characteristic.FirmwareRevision, version);
+      .setCharacteristic(
+        Characteristic.Manufacturer,
+        this.ACCESORY_INF.manufacturer,
+      )
+      .setCharacteristic(Characteristic.Model, this.ACCESORY_INF.model)
+      .setCharacteristic(
+        Characteristic.FirmwareRevision,
+        this.ACCESORY_INF.version,
+      )
+      .setCharacteristic(
+        Characteristic.SerialNumber,
+        this.ACCESORY_INF.serialNumber,
+      );
 
     this.onCharacteristic = this.lightService.getCharacteristic(
       Characteristic.On,
@@ -157,6 +204,20 @@ class LightHSB {
     this.lightBrightness = 100;
   }
 
+  setPaired() {
+    this.events.emit("paired");
+  }
+  setUnpaired() {
+    this.events.emit("unpaired");
+  }
+  setAdvertised() {
+    this.events.emit("advertised");
+  }
+  setIdentify(paired, callback) {
+    this.events.emit("identify", paired);
+    callback(null);
+  }
+
   getState(callback) {
     callback(null, this.lightState);
   }
@@ -167,21 +228,6 @@ class LightHSB {
       this.lightState,
       [this.lightHue, this.lightSaturation, this.lightBrightness],
     ]);
-    callback(null);
-  }
-
-  setPaired() {
-    console.log("LightHSB", "advetised");
-  }
-  setUnpaired() {
-    console.log("LightHSB", "advetised");
-  }
-  setAdvertised() {
-    console.log("LightHSB", "advetised");
-  }
-  setIdentify(paired, callback) {
-    console.log("LightHSB", "identify", paired ? "display" : "search");
-    this.events.emit("identify", paired);
     callback(null);
   }
 
@@ -228,6 +274,9 @@ class LightHSB {
   getAccessory() {
     return this.accessory;
   }
+  getAccessoryInformation() {
+    return this.ACCESORY_INF;
+  }
   category = hap.Categories.LIGHTBULB;
 }
 
@@ -235,18 +284,34 @@ class LightHSB {
 class LightBRG {
   constructor(version, accessoryName, serviceName, accessoryUUIDString) {
     this.events = new EventEmitter();
-    this.accessoryName = accessoryName;
-    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
-    this.serviceName = serviceName;
+    this.ACCESORY_NAME = accessoryName;
+    this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
+    this.SERVICE_NAME = serviceName;
+    this.ACCESORY_INF = {
+      manufacturer: "Fabrizz",
+      model: "MagicMirror HK LightBRG",
+      version,
+      serialNumber: "BASIC:LIGHTBRG",
+    };
 
-    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
-    this.lightService = new Service.Lightbulb(this.serviceName);
+    this.accessory = new Accessory(this.ACCESORY_NAME, this.ACCESSORY_UUID);
+    this.lightService = new Service.Lightbulb(this.SERVICE_NAME);
 
     this.accessory
       .getService(Service.AccessoryInformation)
-      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
-      .setCharacteristic(Characteristic.Model, "MagicMirror HK LightBRG")
-      .setCharacteristic(Characteristic.FirmwareRevision, version);
+      .setCharacteristic(
+        Characteristic.Manufacturer,
+        this.ACCESORY_INF.manufacturer,
+      )
+      .setCharacteristic(Characteristic.Model, this.ACCESORY_INF.model)
+      .setCharacteristic(
+        Characteristic.FirmwareRevision,
+        this.ACCESORY_INF.version,
+      )
+      .setCharacteristic(
+        Characteristic.SerialNumber,
+        this.ACCESORY_INF.serialNumber,
+      );
 
     this.onCharacteristic = this.lightService.getCharacteristic(
       Characteristic.On,
@@ -274,12 +339,25 @@ class LightBRG {
       this.setStateBrightness.bind(this),
     );
 
+    this.accessory.on("advertised", this.setAdvertised.bind(this));
+    this.accessory.on("paired", this.setPaired.bind(this));
+    this.accessory.on("unpaired", this.setUnpaired.bind(this));
     this.accessory.on("identify", this.setIdentify.bind(this));
+
     this.accessory.addService(this.lightService);
     this.lightState = false;
     this.lightBrightness = 100;
   }
 
+  setPaired() {
+    this.events.emit("paired");
+  }
+  setUnpaired() {
+    this.events.emit("unpaired");
+  }
+  setAdvertised() {
+    this.events.emit("advertised");
+  }
   setIdentify(paired, callback) {
     this.events.emit("identify", paired);
     callback(null);
@@ -320,6 +398,9 @@ class LightBRG {
   getAccessory() {
     return this.accessory;
   }
+  getAccessoryInformation() {
+    return this.ACCESORY_INF;
+  }
   category = hap.Categories.LIGHTBULB;
 }
 
@@ -327,19 +408,36 @@ class LightBRG {
 class SwitchMultiple {
   constructor(version, accessoryName, accessoryUUIDString, switchList) {
     this.events = new EventEmitter();
-    this.accessoryName = accessoryName;
-    this.accessoryUUID = Uuid.generate(accessoryUUIDString);
+    this.ACCESORY_NAME = accessoryName;
+    this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
+    this.ACCESORY_INF = {
+      manufacturer: "Fabrizz",
+      model: "MagicMirror HK SwitchMultiple",
+      version,
+      serialNumber: "MULTIPLE:SWITCH",
+    };
+
     this.switchlist = switchList;
     this.switchServices = [];
     this.switchStates = [];
 
-    this.accessory = new Accessory(this.accessoryName, this.accessoryUUID);
+    this.accessory = new Accessory(this.ACCESORY_NAME, this.ACCESSORY_UUID);
 
     this.accessory
       .getService(Service.AccessoryInformation)
-      .setCharacteristic(Characteristic.Manufacturer, "Fabrizz")
-      .setCharacteristic(Characteristic.Model, "MagicMirror HK SwitchMultiple")
-      .setCharacteristic(Characteristic.FirmwareRevision, version);
+      .setCharacteristic(
+        Characteristic.Manufacturer,
+        this.ACCESORY_INF.manufacturer,
+      )
+      .setCharacteristic(Characteristic.Model, this.ACCESORY_INF.model)
+      .setCharacteristic(
+        Characteristic.FirmwareRevision,
+        this.ACCESORY_INF.version,
+      )
+      .setCharacteristic(
+        Characteristic.SerialNumber,
+        this.ACCESORY_INF.serialNumber,
+      );
 
     this.switchlist.forEach((name, index) => {
       this.switchStates.push(false);
@@ -362,9 +460,21 @@ class SwitchMultiple {
       this.accessory.addService(switchService);
     });
 
+    this.accessory.on("advertised", this.setAdvertised.bind(this));
+    this.accessory.on("paired", this.setPaired.bind(this));
+    this.accessory.on("unpaired", this.setUnpaired.bind(this));
     this.accessory.on("identify", this.setIdentify.bind(this));
   }
 
+  setPaired() {
+    this.events.emit("paired");
+  }
+  setUnpaired() {
+    this.events.emit("unpaired");
+  }
+  setAdvertised() {
+    this.events.emit("advertised");
+  }
   setIdentify(paired, callback) {
     this.events.emit("identify", paired);
     callback(null);
@@ -394,6 +504,9 @@ class SwitchMultiple {
 
   getAccessory() {
     return this.accessory;
+  }
+  getAccessoryInformation() {
+    return this.ACCESORY_INF;
   }
   category = hap.Categories.OUTLET;
 }
