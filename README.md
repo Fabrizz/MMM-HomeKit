@@ -4,4 +4,5 @@ I need help testing the module with different Homekit configurations and ["Apple
 
 Only accessories and backend handlers are finished.
 
-<img width="1058" alt="image" src="https://github.com/Fabrizz/MMM-HomeKit/assets/65259076/7fb63c09-dee5-4a41-940d-d1adadb98f71">
+<img width="1100" alt="image" src="https://github.com/Fabrizz/MMM-HomeKit/assets/65259076/2b9c52fe-8f32-4ca5-8443-934b11a70e89">
+
