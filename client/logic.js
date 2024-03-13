@@ -230,6 +230,7 @@ eventSource.addEventListener("message", (message) => {
           accessoryInformation[device].state =
             sync.data.payload.eventPayload.subtype;
           let onCard = document.querySelector(`.t-${device} .t-badge`);
+          onCard.innerHTML = "";
           let onModal =
             currentModal === device
               ? document.querySelector(
@@ -237,8 +238,11 @@ eventSource.addEventListener("message", (message) => {
                 )
               : false;
           const badge = getStateBadge(sync.data.payload.eventPayload.subtype);
-          onCard.replaceChildren(badge);
-          if (onModal) onModal.replaceChildren(badge);
+          onCard.append(badge);
+          if (onModal) {
+            onModal.innerHTML = "";
+            onModal.append(badge);
+          }
         }
         break;
       }

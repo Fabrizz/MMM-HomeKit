@@ -9,7 +9,13 @@ const CharacteristicEventTypes = hap.CharacteristicEventTypes;
 
 /*************************************************************************** SWITCH */
 class Switch {
-  constructor(version, accessoryName, serviceName, accessoryUUIDString) {
+  constructor(
+    version,
+    accessoryName,
+    serviceName,
+    accessoryUUIDString,
+    startValue = false,
+  ) {
     this.events = new EventEmitter();
     this.ACCESORY_NAME = accessoryName;
     this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
@@ -43,7 +49,7 @@ class Switch {
     this.onCharacteristic = this.switchService.getCharacteristic(
       Characteristic.On,
     );
-    this.onCharacteristic.setValue(false);
+    this.onCharacteristic.setValue(startValue);
     this.onCharacteristic.on(
       CharacteristicEventTypes.GET,
       this.getState.bind(this),
@@ -59,7 +65,7 @@ class Switch {
     this.accessory.on("identify", this.setIdentify.bind(this));
 
     this.accessory.addService(this.switchService);
-    this.switchState = false;
+    this.switchState = startValue;
   }
 
   setPaired() {
@@ -109,7 +115,13 @@ class Switch {
 
 /*************************************************************************** LIGHT HSB */
 class LightHSB {
-  constructor(version, accessoryName, serviceName, accessoryUUIDString) {
+  constructor(
+    version,
+    accessoryName,
+    serviceName,
+    accessoryUUIDString,
+    startValue = [false, [0, 0, 100]],
+  ) {
     this.events = new EventEmitter();
     this.ACCESORY_NAME = accessoryName;
     this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
@@ -143,7 +155,7 @@ class LightHSB {
     this.onCharacteristic = this.lightService.getCharacteristic(
       Characteristic.On,
     );
-    this.onCharacteristic.setValue(false);
+    this.onCharacteristic.setValue(startValue[0]);
     this.onCharacteristic.on(
       CharacteristicEventTypes.GET,
       this.getState.bind(this),
@@ -153,23 +165,10 @@ class LightHSB {
       this.setState.bind(this),
     );
 
-    this.brightnessCharacteristic = this.lightService.getCharacteristic(
-      Characteristic.Brightness,
-    );
-    this.brightnessCharacteristic.setValue(100);
-    this.brightnessCharacteristic.on(
-      CharacteristicEventTypes.GET,
-      this.getStateBrightness.bind(this),
-    );
-    this.brightnessCharacteristic.on(
-      CharacteristicEventTypes.SET,
-      this.setStateBrightness.bind(this),
-    );
-
     this.hueCharacteristic = this.lightService.getCharacteristic(
       Characteristic.Hue,
     );
-    this.hueCharacteristic.setValue(0);
+    this.hueCharacteristic.setValue(startValue[1][0]);
     this.hueCharacteristic.on(
       CharacteristicEventTypes.GET,
       this.getStateHue.bind(this),
@@ -182,7 +181,7 @@ class LightHSB {
     this.saturationCharacteristic = this.lightService.getCharacteristic(
       Characteristic.Saturation,
     );
-    this.saturationCharacteristic.setValue(0);
+    this.saturationCharacteristic.setValue(startValue[1][1]);
     this.saturationCharacteristic.on(
       CharacteristicEventTypes.GET,
       this.getStateSaturation.bind(this),
@@ -192,16 +191,29 @@ class LightHSB {
       this.setStateSaturation.bind(this),
     );
 
+    this.brightnessCharacteristic = this.lightService.getCharacteristic(
+      Characteristic.Brightness,
+    );
+    this.brightnessCharacteristic.setValue(startValue[1][2]);
+    this.brightnessCharacteristic.on(
+      CharacteristicEventTypes.GET,
+      this.getStateBrightness.bind(this),
+    );
+    this.brightnessCharacteristic.on(
+      CharacteristicEventTypes.SET,
+      this.setStateBrightness.bind(this),
+    );
+
     this.accessory.on("advertised", this.setAdvertised.bind(this));
     this.accessory.on("paired", this.setPaired.bind(this));
     this.accessory.on("unpaired", this.setUnpaired.bind(this));
     this.accessory.on("identify", this.setIdentify.bind(this));
 
     this.accessory.addService(this.lightService);
-    this.lightState = false;
-    this.lightHue = 0;
-    this.lightSaturation = 0;
-    this.lightBrightness = 100;
+    this.lightState = startValue[0];
+    this.lightHue = startValue[1][0];
+    this.lightSaturation = startValue[1][1];
+    this.lightBrightness = startValue[1][2];
   }
 
   setPaired() {
@@ -236,6 +248,10 @@ class LightHSB {
   }
   setStateBrightness(value, callback) {
     this.lightBrightness = value;
+    this.events.emit("stateChange", [
+      this.lightState,
+      [this.lightHue, this.lightSaturation, this.lightBrightness],
+    ]);
     callback(null);
   }
 
@@ -244,6 +260,10 @@ class LightHSB {
   }
   setStateSaturation(value, callback) {
     this.lightSaturation = value;
+    this.events.emit("stateChange", [
+      this.lightState,
+      [this.lightHue, this.lightSaturation, this.lightBrightness],
+    ]);
     callback(null);
   }
 
@@ -252,6 +272,10 @@ class LightHSB {
   }
   setStateHue(value, callback) {
     this.lightHue = value;
+    this.events.emit("stateChange", [
+      this.lightState,
+      [this.lightHue, this.lightSaturation, this.lightBrightness],
+    ]);
     callback(null);
   }
 
@@ -282,7 +306,13 @@ class LightHSB {
 
 /*************************************************************************** LIGHT BRG */
 class LightBRG {
-  constructor(version, accessoryName, serviceName, accessoryUUIDString) {
+  constructor(
+    version,
+    accessoryName,
+    serviceName,
+    accessoryUUIDString,
+    startValue = [false, 100],
+  ) {
     this.events = new EventEmitter();
     this.ACCESORY_NAME = accessoryName;
     this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
@@ -316,7 +346,7 @@ class LightBRG {
     this.onCharacteristic = this.lightService.getCharacteristic(
       Characteristic.On,
     );
-    this.onCharacteristic.setValue(false);
+    this.onCharacteristic.setValue(startValue[0]);
     this.onCharacteristic.on(
       CharacteristicEventTypes.GET,
       this.getState.bind(this),
@@ -329,7 +359,7 @@ class LightBRG {
     this.brightnessCharacteristic = this.lightService.getCharacteristic(
       Characteristic.Brightness,
     );
-    this.brightnessCharacteristic.setValue(100);
+    this.brightnessCharacteristic.setValue(startValue[1]);
     this.brightnessCharacteristic.on(
       CharacteristicEventTypes.GET,
       this.getStateBrightness.bind(this),
@@ -345,8 +375,8 @@ class LightBRG {
     this.accessory.on("identify", this.setIdentify.bind(this));
 
     this.accessory.addService(this.lightService);
-    this.lightState = false;
-    this.lightBrightness = 100;
+    this.lightState = startValue[0];
+    this.lightBrightness = startValue[1];
   }
 
   setPaired() {
@@ -406,7 +436,13 @@ class LightBRG {
 
 /*************************************************************************** SWITCH MULTIPLE */
 class SwitchMultiple {
-  constructor(version, accessoryName, accessoryUUIDString, switchList) {
+  constructor(
+    version,
+    accessoryName,
+    accessoryUUIDString,
+    switchList,
+    startValue,
+  ) {
     this.events = new EventEmitter();
     this.ACCESORY_NAME = accessoryName;
     this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
@@ -440,12 +476,14 @@ class SwitchMultiple {
       );
 
     this.switchlist.forEach((name, index) => {
-      this.switchStates.push(false);
+      const state = startValue ? startValue[index] : false;
+      this.switchStates.push(state);
+
       const switchService = new Service.Outlet(name, String(index));
       const onCharacteristic = switchService.getCharacteristic(
         Characteristic.On,
       );
-      onCharacteristic.setValue(false);
+      onCharacteristic.setValue(state);
 
       onCharacteristic.on(
         CharacteristicEventTypes.GET,

@@ -31,16 +31,16 @@
     .identify-animation .line {
       animation: notifyBackground 2000ms ease-in-out 3;
     }
-    @keyframes notifyBackground {
-      0%, 100% { background-color: transparent; }
-      50% { background-color: var(--bs-primary); }
-    }
     .intermitent .col .card {
       animation: intermitent 2000ms ease-in-out 3;
     }
     @keyframes intermitent {
       0%, 100% { box-shadow: rgb(149 157 165 / 18%) 0 8px 24px; }
       50% { box-shadow: #0d6dfdc7 0 0px 3px; }
+    }
+    @keyframes notifyBackground {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: var(--bs-primary); }
     }
   </style>
 </head>
@@ -230,7 +230,7 @@
               </span>
               <span style="font-size: 1rem !important;" class="t-badge"></span>
             </h5>
-            <p class="card-text t-description p-1" style="margin-bottom: 0.52rem !important; flex: 1;"></p>
+            <p class="card-text t-description p-1 flex1" style="margin-bottom: 0.52rem !important;"></p>
             <div class="d-flex" style="margin-bottom: -2px;">
               <ul class="list-group list-group-horizontal text-nowrap me-auto" style="z-index: 10;">
                 <li class="list-group-item t-pincode text-nowrap rounded-4" style="font-weight: 500;"></li>
@@ -350,7 +350,7 @@
             </svg>
             Documentation
           </a>
-          <button type="button" class="btn btn-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap d-none d-sm-block" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap d-none d-sm-flex" data-bs-dismiss="modal">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
               <use xlink:href="#gear"></use>
             </svg>

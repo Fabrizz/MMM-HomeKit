@@ -176,7 +176,8 @@ class ScreenControlHandler {
     };
     this.handlerData = {
       icon: "lightbulb",
-      description: "Description for device.",
+      description:
+        "Exposes a light with brightness control to simulate the mirror screen.",
       notificationName: this.NOTIFICATION_NAME,
       docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
@@ -232,13 +233,16 @@ class PageControlHandler {
     this.ACCESSORY_UUID = "FABRIZZ:MMMHK:PAGECONTROL";
     this.NOTIFICATION_NAME = "PAGE_CONTROL";
     this.pageList = ["Aaa", "Bbb", "Ccc"];
-    this.pageListState = [false, false, false];
-    this.currentPage = undefined;
+    this.pageListState = true
+      ? Array.from(this.pageList).map((_, i) => i === 0)
+      : Array.from(this.pageList).map((_) => false);
+    this.currentPage = true ? 0 : undefined;
     this.accessory = new SwitchMultiple(
       version,
       config.name,
       this.ACCESSORY_UUID,
       this.pageList,
+      this.pageListState,
     );
     this.accessoryPublishInfo = {
       username: "17:51:09:F4:AC:8C",
@@ -250,7 +254,8 @@ class PageControlHandler {
     this.handlerData = {
       notificationName: this.NOTIFICATION_NAME,
       icon: "toggles",
-      description: "Description for device.",
+      description:
+        "Exposes a power strip that controls the current MM2 page, you can control them using shorcuts!",
       docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
