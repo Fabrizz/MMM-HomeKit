@@ -6,6 +6,70 @@ const Characteristic = hap.Characteristic;
 const Service = hap.Service;
 const Uuid = hap.uuid;
 const CharacteristicEventTypes = hap.CharacteristicEventTypes;
+const Bridge = hap.Bridge;
+
+/*************************************************************************** BRIDGE */
+class BasicBridge {
+  constructor(version, accessoryName, accessoryUUIDString) {
+    this.events = new EventEmitter();
+    this.ACCESORY_NAME = accessoryName;
+    this.ACCESSORY_UUID = Uuid.generate(accessoryUUIDString);
+    this.ACCESORY_INF = {
+      manufacturer: "Fabrizz",
+      model: "MagicMirror HK Experimental Bridge",
+      version,
+      serialNumber: "EXPERIMENTAL:BRIDGE",
+    };
+
+    this.accessory = new Bridge(this.ACCESORY_NAME, this.ACCESSORY_UUID);
+
+    this.accessory
+      .getService(Service.AccessoryInformation)
+      .setCharacteristic(
+        Characteristic.Manufacturer,
+        this.ACCESORY_INF.manufacturer,
+      )
+      .setCharacteristic(Characteristic.Model, this.ACCESORY_INF.model)
+      .setCharacteristic(
+        Characteristic.FirmwareRevision,
+        this.ACCESORY_INF.version,
+      )
+      .setCharacteristic(
+        Characteristic.SerialNumber,
+        this.ACCESORY_INF.serialNumber,
+      );
+
+    this.accessory.on("advertised", this.setAdvertised.bind(this));
+    this.accessory.on("paired", this.setPaired.bind(this));
+    this.accessory.on("unpaired", this.setUnpaired.bind(this));
+    this.accessory.on("identify", this.setIdentify.bind(this));
+  }
+  setPaired() {
+    this.events.emit("paired");
+  }
+  setUnpaired() {
+    this.events.emit("unpaired");
+  }
+  setAdvertised() {
+    this.events.emit("advertised");
+  }
+  setIdentify(paired, callback) {
+    this.events.emit("identify", paired);
+    callback(null);
+  }
+
+  on(eventName, listener) {
+    this.events.on(eventName, listener);
+  }
+
+  getAccessory() {
+    return this.accessory;
+  }
+  getAccessoryInformation() {
+    return this.ACCESORY_INF;
+  }
+  category = hap.Categories.BRIDGE;
+}
 
 /*************************************************************************** SWITCH */
 class Switch {
@@ -549,4 +613,10 @@ class SwitchMultiple {
   category = hap.Categories.OUTLET;
 }
 
-module.exports = { Switch, LightHSB, LightBRG, SwitchMultiple };
+module.exports = {
+  BasicBridge,
+  Switch,
+  LightHSB,
+  LightBRG,
+  SwitchMultiple,
+};

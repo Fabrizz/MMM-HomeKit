@@ -48,6 +48,9 @@ Module.register("MMM-HomeKit", {
       serviceName: "TR(Lyrics)" | <str>,
     } | false */
 
+    // [EXPERIMENTAL] This will allow the module to use a hk bridge as the communication channel
+    useExperimentalBridge: false,
+
     // In special use cases where a frontend needs to take over other you can disable
     // the id matching for the frontend, so "multiple" frontends can talk to the module even if not supported
     matchBackendUUID: false,
@@ -75,7 +78,7 @@ Module.register("MMM-HomeKit", {
     const basicDom = document.createElement("div");
     basicDom.id = "HMKT-NOTIFICATIONS";
     const moduleData = document.createComment(
-      `MMM-HMKT Version: ${this.version}`,
+      `MMM-HMKT Version: ${this.VERSION}`,
     );
     const moduleVersion = document.createComment(
       "MMM-HomeKit by Fabrizz | https://github.com/Fabrizz/MMM-HomeKit",
@@ -90,8 +93,8 @@ Module.register("MMM-HomeKit", {
   /******************************************************** Start */
   start: function () {
     this.logBadge();
-    this.version = "0.3.0";
-    this.frontendId = this.config.matchBackendUUID
+    this.VERSION = "0.3.0";
+    this.FRONTEND_ID = this.config.matchBackendUUID
       ? Date.now().toString(16)
       : "ABC";
 
@@ -99,11 +102,70 @@ Module.register("MMM-HomeKit", {
     this.featureHandlers = [];
     this.featureHandlersConfiguration = {};
     /* eslint-disable no-undef */
-    this.devicesEventStream = new HomekitEventEmmiter();
+    this.devicesEventStream = new HKEventEmmiter();
     this.availableFeatureHandlers = HKAvailableFeatureHandlers;
     /* eslint-enable no-undef */
 
-    const loggers = {
+    this.FRONTEND_TRANSLATIONS = [
+      "CH_CTA_SUBTITLE",
+      "CH_CTA_BODY",
+      "CH_CTA_BTN_ADD",
+      "CH_CTA_BTN_DOCS",
+      "CH_DEVICESLOADED",
+      "CH_RECIEVEDDATA",
+      "CH_WAITING_BODY",
+      "CH_WAITING",
+      "CH_TYPE",
+      "CH_TIMESTAMP",
+      "CH_PAYLOAD",
+      "CH_MODAL_ADD_TITLE",
+      "CH_MODAL_ADD_BODY",
+      "CH_MODAL_ADD_BTN",
+      "CH_MODAL_DEVICE_PINCODE",
+      "CH_MODAL_DEVICE_USERNAME",
+      "CH_MODAL_DEVICE_PORT",
+      "CH_MODAL_DEVICE_URI",
+      "CH_MODAL_DEVICE_INTEGRATION",
+      "CH_MODAL_DEVICE_STATE",
+      "CH_MODAL_DEVICE_DEVICE",
+      "CH_MODAL_DEVICE_HANDLER",
+      "CH_MODAL_DEVICE_NOTIFICATION",
+      "CH_MODAL_DEVICE_IDMATERIAL",
+      "CH_MODAL_DEVICE_CATEGORY",
+      "CH_MODAL_DEVICE_BTN_DOCS",
+      "CH_MODAL_DEVICE_BTN_GENERALCONFIG",
+      "CH_MODAL_DEVICE_BTN_CLOSE",
+      "CH_MODAL_CONFIG_TITLE",
+      "CH_MODAL_CONFIG_DATA_TITLE",
+      "CH_MODAL_CONFIG_DATA_BODY",
+      "CH_MODAL_CONFIG_DATA_BNT",
+      "CH_MODAL_CONFIG_DELETE_TITLE",
+      "CH_MODAL_CONFIG_DELETE_BODY",
+      "CH_MODAL_CONFIG_DELETE_BTN",
+      "CH_MODAL_CONFIG_BTN_DOCS",
+      "CH_MODAL_CONFIG_BTN_CLOSE",
+      "CH_MODAL_DELETE_SUBTITLE",
+      "CH_MODAL_DELETE_TITLE",
+      "CH_MODAL_DELETE_NOTICE",
+      "CH_MODAL_DELETE_BODY",
+      "CH_MODAL_DELETE_BTN_DOCS",
+      "CH_MODAL_DELETE_BTN_DELETE",
+      "CH_MODAL_DELETE_BTN_DELETE_DONE",
+      "CH_MODAL_DELETE_BTN_DELETE_ERROR",
+      "CH_MODAL_DELETE_BTN_BACK",
+      "CH_MODAL_DATA_DEVICE",
+      "CH_MODAL_DATA_TRANSLATIONS",
+      "CH_MODAL_DATA_OTHER",
+      "CH_MODAL_DATA_BTN_BACK",
+      "CH_CODE_CREATED",
+      "CH_CODE_PAIRED",
+      "CH_CODE_ADVERTISED",
+      "CH_CODE_UNPAIRED",
+      "CH_CODE_PREIDENTIFY",
+      "CH_CODE_UNKNOWN",
+    ];
+
+    const LOGGERS = {
       debug: this.logDebug,
       info: this.logInfo,
       warnBasic: this.logWarnBasic,
@@ -122,7 +184,7 @@ Module.register("MMM-HomeKit", {
             (x, y) => this.translate(x, y),
             (x, y) => this.sendNotification(x, y),
             (x, y) => this.sendAccesoryNotification(x, y),
-            loggers,
+            LOGGERS,
           );
           this.thirdPartyNotificationsListenTo.push(...Handler.listenTo());
           this.featureHandlersConfiguration[key] = Handler.configuration();
@@ -138,9 +200,25 @@ Module.register("MMM-HomeKit", {
   notificationReceived: function (notification, payload) {
     switch (notification) {
       case "ALL_MODULES_STARTED":
+        try {
+          this.sendSocketNotification(
+            "HELPER_TRANSLATIONS",
+            // eslint-disable-next-line no-undef
+            HKTranslateAll(
+              (x, y) => this.translate(x, y),
+              this.FRONTEND_TRANSLATIONS,
+            ),
+          );
+        } catch (error) {
+          this.logError(this.translate("TRANSLATION_ERROR"), error);
+        }
         this.sendSocketNotification("HOMEKIT_START", {
           homekitCfg: this.featureHandlersConfiguration,
-          frontendId: this.frontendId,
+          frontendId: this.FRONTEND_ID,
+          useExperimentalBridge: this.config.useExperimentalBridge
+            ? // eslint-disable-next-line no-undef
+              HKExperimentalBridgeConfiguration
+            : false,
         });
         this.logInfo(
           this.translate("CONFIGURATION_SYNC"),

@@ -9,20 +9,41 @@ const deviceModalTarget = document.getElementById("deviceModalTarget");
 const messageTemplate = document.getElementById("message-template");
 const dataDiv = document.getElementById("appendable-messages");
 
-let messageCount = 0;
-let currentModal = undefined;
 let messages = [];
+let messageCount = 0;
+
+let currentModal = undefined;
+let lastBadge = null;
+
 let accessoryInformation = {};
+let accessoryInformationHtml = "";
+
+let translations = {};
+let translationsVerbose = "";
+
+let requestMatch = "";
 
 deviceModal.addEventListener("show.bs.modal", async (event) => {
   const modal = document.importNode(deviceModalTemplate.content, true);
   const attrib = event.relatedTarget.getAttribute("device-reference");
   const device = accessoryInformation[attrib];
 
+  const elements = modal.querySelectorAll("[data-translate]");
+  elements.forEach((element) => {
+    const key = element.getAttribute("data-translate");
+    if (key in translations) {
+      element.textContent = translations[key];
+    }
+  });
+
   const hkQr = await composeHomekitQrCode(
     device.pincode.replace(/\D/g, ""),
     device.setupURI,
   );
+
+  if (device.delegated) {
+    modal.querySelector(".t-intdata").classList.add("blur");
+  }
 
   modal.querySelector(".t-hkcode").innerHTML = hkQr;
   modal.querySelector(".t-pincode").innerText = device.pincode;
@@ -46,7 +67,7 @@ deviceModal.addEventListener("show.bs.modal", async (event) => {
   modal.querySelector(".t-manufacturer").innerText = device.manufacturer;
   modal.querySelector(".t-model").innerText = device.model;
   modal.querySelector(".t-serial").innerText = device.serialNumber;
-  modal.querySelector(".t-version").innerText = device.manufacturer;
+  modal.querySelector(".t-version").innerText = device.version;
 
   modal.querySelector(".t-docs").href = device.docsUrl;
 
@@ -55,6 +76,13 @@ deviceModal.addEventListener("show.bs.modal", async (event) => {
 });
 deviceModal.addEventListener("hidden.bs.modal", () => {
   deviceModalTarget.textContent = "";
+
+  if (lastBadge) {
+    let onCard = document.querySelector(`.card.t-${lastBadge[0]} .t-badge`);
+    onCard.innerHTML = "";
+    onCard.appendChild(lastBadge[1]);
+  }
+  lastBadge = undefined;
   currentModal = undefined;
 });
 
@@ -73,7 +101,8 @@ document.getElementById("ctaModal").addEventListener("hidden.bs.modal", () => {
 function generateMessageListEl(sync) {
   messageCount++;
   if (messageCount > 50) {
-    /* TODO */
+    messages.shift();
+    dataDiv.removeChild(dataDiv.lastChild);
   }
   messages.push(sync);
 
@@ -114,27 +143,31 @@ function getStateBadge(state) {
   switch (state) {
     case "created":
       badge.classList.add("text-bg-primary");
-      badge.innerText = "Created";
+      badge.innerText = getTranslation("CH_CODE_CREATED", "Created");
       break;
     case "paired":
       badge.classList.add("text-bg-info");
-      badge.innerText = "Paired";
+      badge.innerText = getTranslation("CH_CODE_PAIRED", "Paired");
       break;
     case "advertised":
       badge.classList.add("text-bg-success");
-      badge.innerText = "Advertised";
+      badge.innerText = getTranslation("CH_CODE_ADVERTISED", "Advertised");
       break;
     case "unpaired":
       badge.classList.add("text-bg-warning");
-      badge.innerText = "Unpaired";
+      badge.innerText = getTranslation("CH_CODE_UNPAIRED", "Unpaired");
       break;
     case "identify":
       badge.classList.add("text-bg-info");
-      badge.innerText = "Pre-identify";
+      badge.innerText = getTranslation("CH_CODE_PREIDENTIFY", "Pre-identify");
+      break;
+    case "bridge":
+      badge.classList.add("text-bg-dark");
+      badge.innerText = getTranslation("CH_CODE_BRIDGE", "Via bridge");
       break;
     default:
       badge.classList.add("text-bg-secondary");
-      badge.innerText = "Unknown";
+      badge.innerText = getTranslation("CH_CODE_UNKNOWN", "Unknown");
       break;
   }
 
@@ -156,17 +189,26 @@ function generateDeviceCards(devices) {
     const card = document.importNode(cardTemplate.content, true);
     const device = devices[key];
 
+    if (device.isBridge) {
+      const c = card.querySelector(".card");
+      c.classList.add("border-primary-subtle");
+      c.classList.remove("border-light");
+    }
+
     card
       .querySelector(".card")
       .classList.add(`t-${key}`, `t-${device.notificationName}`);
-    if (device.addIdentifyingMaterial) {
+    if (device.addIdentifyingMaterial && !device.delegated) {
       card.querySelector(".t-name").innerText = device.displayName.slice(0, -5);
       card.querySelector(".t-mat").innerText = device.displayName.slice(-4);
     } else {
       card.querySelector(".t-name").innerText = device.displayName;
+      if (device.delegated) card.querySelector(".t-mat").innerText = "BRIDGED";
     }
+    const pincode = card.querySelector(".t-pincode");
+    pincode.innerText = device.pincode;
+    if (device.delegated) pincode.style.visibility = "hidden";
 
-    card.querySelector(".t-pincode").innerText = device.pincode;
     card.querySelector(".t-btn-info").setAttribute("device-reference", key);
     card.querySelector(".t-btn-docs").href = device.docsUrl;
 
@@ -188,7 +230,11 @@ function generateDeviceCards(devices) {
     } else {
       description.remove();
     }
-    target.appendChild(card);
+    if (device.isBridge) {
+      target.prepend(card);
+    } else {
+      target.appendChild(card);
+    }
   }
 }
 
@@ -199,6 +245,37 @@ eventSource.addEventListener("message", (message) => {
       accessoryInformation = sync.data;
       console.log(accessoryInformation);
       generateDeviceCards(accessoryInformation);
+
+      accessoryInformationHtml = "";
+      for (let key in accessoryInformation) {
+        accessoryInformationHtml += `<b>${key}</b> ↓<br>`;
+        const nestedObj = accessoryInformation[key];
+        for (let nestedKey in nestedObj) {
+          accessoryInformationHtml += `  ${nestedKey}: ${nestedObj[nestedKey]}<br>`;
+        }
+        accessoryInformationHtml;
+      }
+      document.querySelector(
+        ".t-code-devices",
+      ).innerHTML = `<pre>${accessoryInformationHtml}</pre>`;
+      break;
+
+    case "hka":
+      console.log(sync);
+      requestMatch = sync.data;
+      break;
+
+    case "translations":
+      translations = sync.data;
+      console.log(translations);
+      setTranslationsByAttributte(translations);
+
+      for (let key in translations) {
+        translationsVerbose += `<b>${key}</b> → ${translations[key]}<br>`;
+      }
+      document.querySelector(
+        ".t-code-translations",
+      ).innerHTML = `<pre>${translationsVerbose}</pre>`;
       break;
 
     case "toFrontend":
@@ -229,19 +306,19 @@ eventSource.addEventListener("message", (message) => {
         } else {
           accessoryInformation[device].state =
             sync.data.payload.eventPayload.subtype;
-          let onCard = document.querySelector(`.t-${device} .t-badge`);
-          onCard.innerHTML = "";
-          let onModal =
-            currentModal === device
-              ? document.querySelector(
-                  `#deviceModalTarget .modal-content .modal-body .table .t-state`,
-                )
-              : false;
           const badge = getStateBadge(sync.data.payload.eventPayload.subtype);
-          onCard.append(badge);
-          if (onModal) {
+
+          if (currentModal === device) {
+            lastBadge = [device, badge];
+            const onModal = document.querySelector(
+              `#deviceModalTarget .modal-content .modal-body .table .t-state`,
+            );
             onModal.innerHTML = "";
-            onModal.append(badge);
+            onModal.appendChild(badge);
+          } else {
+            let onCard = document.querySelector(`.card.t-${device} .t-badge`);
+            onCard.innerHTML = "";
+            onCard.appendChild(badge);
           }
         }
         break;
@@ -260,6 +337,57 @@ eventSource.addEventListener("message", (message) => {
 eventSource.onerror = (error) => {
   console.error("Error:", error);
 };
+
+document.getElementById("hk-remove-data").addEventListener("click", (e) => {
+  e.preventDefault();
+  fetch("/homekit/delete-configuration", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ match: requestMatch }),
+  }).then((res) => {
+    const btn = document.getElementById("hk-remove-data");
+    switch (res.status) {
+      case 200:
+        document
+          .getElementById("hk-remove-data-use")
+          .setAttributeNS(
+            "http://www.w3.org/1999/xlink",
+            "xlink:href",
+            `#checkcircle`,
+          );
+
+        btn.classList.remove("btn-danger");
+        btn.classList.add("btn-outline-danger");
+        btn.attributes.setNamedItem(document.createAttribute("disabled"));
+
+        console.log(document.getElementById("hk-remove-data-tx"));
+
+        document.getElementById("hk-remove-data-tx").innerText = getTranslation(
+          "CH_MODAL_DELETE_BTN_DELETE_DONE",
+          "HAP data removed! Restart MM2",
+        );
+        break;
+      case 500:
+        console.warn("/delete-configuration [500] Forbidden", res);
+        document
+          .getElementById("hk-remove-data-use")
+          .setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#x`);
+        document.getElementById("hk-remove-data-tx").innerText = getTranslation(
+          "CH_MODAL_DELETE_BTN_DELETE_ERROR",
+          "Error removing HAP data",
+        );
+        break;
+      case 403:
+        console.warn("/delete-configuration [403] Forbidden", res);
+        break;
+      default:
+        console.error("/delete-configuration [UNKNOWN]", res);
+        break;
+    }
+  });
+});
 
 console.log(
   ` ⠖ %c by Fabrizz %c MMM-HomeKit `,
@@ -316,3 +444,37 @@ const composeHomekitQrCode = async (pairingCode, setupUri) => {
   <use href="#qrCode" height="340" width="340" x="30" y="175"/>
 </svg>`;
 };
+
+/**
+ * Generate a random pastel color.
+ * @returns {string} HSL color.
+ */
+function getRandomPastelColor() {
+  const hue = Math.floor(Math.random() * 360);
+  return `hsl(${hue}, 100%, 85%)`;
+}
+
+/**
+ * Set translations to the elements with data-translate attribute.
+ * @param {object} translationObject - The object containing translations.
+ */
+function setTranslationsByAttributte(translationObject) {
+  for (const translationKey in translationObject) {
+    const elements = document.querySelectorAll(
+      `[data-translate="${translationKey}"]`,
+    );
+    elements.forEach((element) => {
+      element.innerHTML = translationObject[translationKey];
+    });
+  }
+}
+
+/**
+ * Retrieves the translation for the given key. If the translation is not found, the fallback value is returned.
+ * @param {string} key - The key to look up the translation.
+ * @param {string} fallback - The fallback value to return if the translation is not found.
+ * @returns {string} The translated value or the fallback value.
+ */
+function getTranslation(key, fallback) {
+  return key in translations ? translations[key] : fallback;
+}

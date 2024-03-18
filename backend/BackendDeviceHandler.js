@@ -1,10 +1,71 @@
-const { Switch, LightHSB, LightBRG, SwitchMultiple } = require("./Accessories");
+const {
+  BasicBridge,
+  Switch,
+  LightHSB,
+  LightBRG,
+  SwitchMultiple,
+} = require("./Accessories");
 const { HSVtoRGB } = require("./utils");
+
+class BridgeHandler {
+  constructor(config, events, sendMirrorHandlerNotification, version) {
+    this.ACCESSORY_UUID = "FABRIZZ:MMMHK:EXPERIMENTALBRIDGE";
+    this.NOTIFICATION_NAME = config.helperRef.notificationName;
+    this.accessory = new BasicBridge(version, config.name, this.ACCESSORY_UUID);
+    this.accessoryPublishInfo = {
+      username: "11:51:07:F4:BC:8A",
+      pincode: "532-11-235",
+      port: config.port ? config.port : 47125,
+      category: this.accessory.category,
+      addIdentifyingMaterial: true,
+    };
+    this.helperData = config.helperRef;
+
+    this.accessory.on("paired", () =>
+      sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
+        type: "device-event",
+        subtype: "paired",
+      }),
+    );
+    this.accessory.on("unpaired", () =>
+      sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
+        type: "device-event",
+        subtype: "unpaired",
+      }),
+    );
+    this.accessory.on("advertised", () =>
+      sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
+        type: "device-event",
+        subtype: "advertised",
+      }),
+    );
+    this.accessory.on("identify", (paired) =>
+      sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
+        type: "device-event",
+        subtype: "identify",
+        paired,
+      }),
+    );
+  }
+
+  getHomekitAccesory() {
+    return this.accessory.getAccessory();
+  }
+  getHomekitAccessoryInformation() {
+    return this.accessory.getAccessoryInformation();
+  }
+  getPublishInfo() {
+    return this.accessoryPublishInfo;
+  }
+  getHelperData() {
+    return this.helperData;
+  }
+}
 
 class ToggleLyricsHandler {
   constructor(config, events, sendMirrorHandlerNotification, version) {
     this.ACCESSORY_UUID = "FABRIZZ:MMMHK:TOGGLELYRICS";
-    this.NOTIFICATION_NAME = "TOGGLE_LYRICS";
+    this.NOTIFICATION_NAME = config.helperRef.notificationName;
     this.accessory = new Switch(
       version,
       config.name,
@@ -14,17 +75,11 @@ class ToggleLyricsHandler {
     this.accessoryPublishInfo = {
       username: "17:51:07:F4:BC:8A",
       pincode: "678-90-870",
-      port: 47129,
+      port: config.port ? config.port : 47129,
       category: this.accessory.category,
       addIdentifyingMaterial: true,
     };
-    this.handlerData = {
-      notificationName: this.NOTIFICATION_NAME,
-      icon: "toggle",
-      description:
-        "Exposes a switch to control MMM-LiveLyrics, works bi-directionally with module state.",
-      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
-    };
+    this.helperData = config.helperRef;
 
     this.accessory.on("paired", () =>
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
@@ -66,6 +121,7 @@ class ToggleLyricsHandler {
       }
     });
   }
+
   getHomekitAccesory() {
     return this.accessory.getAccessory();
   }
@@ -75,15 +131,15 @@ class ToggleLyricsHandler {
   getPublishInfo() {
     return this.accessoryPublishInfo;
   }
-  getHandlerData() {
-    return this.handlerData;
+  getHelperData() {
+    return this.helperData;
   }
 }
 
 class AccentColorHandler {
   constructor(config, events, sendMirrorHandlerNotification, version) {
     this.ACCESSORY_UUID = "FABRIZZ:MMMHK:ACCENTCOLOR";
-    this.NOTIFICATION_NAME = "ACCENT_COLOR";
+    this.NOTIFICATION_NAME = config.helperRef.notificationName;
     this.accessory = new LightHSB(
       version,
       config.name,
@@ -93,17 +149,11 @@ class AccentColorHandler {
     this.accessoryPublishInfo = {
       username: "17:51:07:F4:BC:8C",
       pincode: "678-90-870",
-      port: 47130,
+      port: config.port ? config.port : 47130,
       category: this.accessory.category,
       addIdentifyingMaterial: true,
     };
-    this.handlerData = {
-      icon: "lightbulb",
-      description:
-        "Exposes a HSB lightbulb, controls one-way the MM2 accent color (or any css var).",
-      notificationName: this.NOTIFICATION_NAME,
-      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
-    };
+    this.helperData = config.helperRef;
 
     this.accessory.on("paired", () =>
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
@@ -143,6 +193,7 @@ class AccentColorHandler {
       });
     });
   }
+
   getHomekitAccesory() {
     return this.accessory.getAccessory();
   }
@@ -152,15 +203,15 @@ class AccentColorHandler {
   getPublishInfo() {
     return this.accessoryPublishInfo;
   }
-  getHandlerData() {
-    return this.handlerData;
+  getHelperData() {
+    return this.helperData;
   }
 }
 
 class ScreenControlHandler {
   constructor(config, events, sendMirrorHandlerNotification, version) {
     this.ACCESSORY_UUID = "FABRIZZ:MMMHK:SCREENCONTROL";
-    this.NOTIFICATION_NAME = "SCREEN_CONTROL";
+    this.NOTIFICATION_NAME = config.helperRef.notificationName;
     this.accessory = new LightBRG(
       version,
       config.name,
@@ -170,17 +221,11 @@ class ScreenControlHandler {
     this.accessoryPublishInfo = {
       username: "17:51:09:F4:BC:8C",
       pincode: "678-90-870",
-      port: 47131,
+      port: config.port ? config.port : 47131,
       category: this.accessory.category,
       addIdentifyingMaterial: true,
     };
-    this.handlerData = {
-      icon: "lightbulb",
-      description:
-        "Exposes a light with brightness control to simulate the mirror screen.",
-      notificationName: this.NOTIFICATION_NAME,
-      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
-    };
+    this.helperData = config.helperRef;
 
     this.accessory.on("paired", () =>
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
@@ -214,6 +259,7 @@ class ScreenControlHandler {
       });
     });
   }
+
   getHomekitAccesory() {
     return this.accessory.getAccessory();
   }
@@ -223,15 +269,15 @@ class ScreenControlHandler {
   getPublishInfo() {
     return this.accessoryPublishInfo;
   }
-  getHandlerData() {
-    return this.handlerData;
+  getHelperData() {
+    return this.helperData;
   }
 }
 
 class PageControlHandler {
   constructor(config, events, sendMirrorHandlerNotification, version) {
     this.ACCESSORY_UUID = "FABRIZZ:MMMHK:PAGECONTROL";
-    this.NOTIFICATION_NAME = "PAGE_CONTROL";
+    this.NOTIFICATION_NAME = config.helperRef.notificationName;
     this.pageList = ["Aaa", "Bbb", "Ccc"];
     this.pageListState = true
       ? Array.from(this.pageList).map((_, i) => i === 0)
@@ -247,17 +293,11 @@ class PageControlHandler {
     this.accessoryPublishInfo = {
       username: "17:51:09:F4:AC:8C",
       pincode: "678-90-870",
-      port: 47132,
+      port: config.port ? config.port : 47132,
       category: this.accessory.category,
       addIdentifyingMaterial: true,
     };
-    this.handlerData = {
-      notificationName: this.NOTIFICATION_NAME,
-      icon: "toggles",
-      description:
-        "Exposes a power strip that controls the current MM2 page, you can control them using shorcuts!",
-      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
-    };
+    this.helperData = config.helperRef;
 
     this.accessory.on("paired", () =>
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
@@ -310,6 +350,7 @@ class PageControlHandler {
       }
     };
   }
+
   getHomekitAccesory() {
     return this.accessory.getAccessory();
   }
@@ -319,11 +360,15 @@ class PageControlHandler {
   getPublishInfo() {
     return this.accessoryPublishInfo;
   }
-  getHandlerData() {
-    return this.handlerData;
+  getHelperData() {
+    return this.helperData;
   }
 }
 
+/**
+ * List of handlers for homekit frontend/register actions.
+ * @type {Array}
+ */
 const HandlerList = [
   ["toggleLyrics", ToggleLyricsHandler],
   ["accentColor", AccentColorHandler],
@@ -333,6 +378,7 @@ const HandlerList = [
 
 module.exports = {
   HandlerList,
+  BridgeHandler,
   ToggleLyricsHandler,
   AccentColorHandler,
   ScreenControlHandler,

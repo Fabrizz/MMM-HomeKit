@@ -1,3 +1,16 @@
+let usedPorts = [];
+
+const HKExperimentalBridgeConfiguration = {
+  name: "MMM-HomeKit Experimental Bridge",
+  helperRef: {
+    notificationName: "BRIDGE",
+    icon: "modem",
+    description:
+      "Exposes a switch to control MMM-LiveLyrics, works bi-directionally with module state.",
+    docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
+  },
+};
+
 /** HKToggleLyricsHandler */
 class HKToggleLyricsHandler {
   constructor(
@@ -21,6 +34,26 @@ class HKToggleLyricsHandler {
         configObject.serviceName && typeof configObject.serviceName === "string"
           ? configObject.serviceName.substring(0, 16)
           : translate("HK_SRVC_LYRICS"),
+    };
+
+    if (
+      configObject.port &&
+      typeof configObject.port === "number" &&
+      configObject.port >= 1000 &&
+      configObject.port <= 9999 &&
+      !usedPorts.includes(configObject.port)
+    ) {
+      this.deviceConfig.port = configObject.port;
+      usedPorts.push(configObject.port);
+    }
+
+    //// Information for the configuration helper
+    this.deviceConfig.helperRef = {
+      notificationName: "TOGGLE_LYRICS",
+      icon: "toggle",
+      description:
+        "Exposes a switch to control MMM-LiveLyrics, works bi-directionally with module state.",
+      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
     //// Mirror listener for notifications
@@ -80,6 +113,25 @@ class HKAccentColorHandler {
         configObject.serviceName && typeof configObject.serviceName === "string"
           ? configObject.serviceName.substring(0, 16)
           : translate("HK_SRVC_ACCENT"),
+    };
+
+    if (
+      configObject.port &&
+      typeof configObject.port === "number" &&
+      configObject.port >= 1000 &&
+      configObject.port <= 9999 &&
+      !usedPorts.includes(configObject.port)
+    ) {
+      this.deviceConfig.port = configObject.port;
+      usedPorts.push(configObject.port);
+    }
+
+    this.deviceConfig.helperRef = {
+      notificationName: "ACCENT_COLOR",
+      icon: "lightbulb",
+      description:
+        "Exposes a HSB lightbulb, controls one-way the MM2 accent color (or any css var).",
+      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
     devicesEventStream.on("__HK_ACCENTCOLOR_GET", (_) => {
@@ -149,6 +201,25 @@ class HKScreenControlHandler {
           : translate("HK_SRVC_SCREEN"),
     };
 
+    if (
+      configObject.port &&
+      typeof configObject.port === "number" &&
+      configObject.port >= 1000 &&
+      configObject.port <= 9999 &&
+      !usedPorts.includes(configObject.port)
+    ) {
+      this.deviceConfig.port = configObject.port;
+      usedPorts.push(configObject.port);
+    }
+
+    this.deviceConfig.helperRef = {
+      notificationName: "SCREEN_CONTROL",
+      icon: "lightbulb",
+      description:
+        "Exposes a light with brightness control to simulate the mirror screen.",
+      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
+    };
+
     devicesEventStream.on("SCREEN_CONTROL", (payload) => {
       console.log(payload);
     });
@@ -185,6 +256,25 @@ class HKPageControllHandler {
           : translate("HK_SRVC_PAGE"),
     };
 
+    if (
+      configObject.port &&
+      typeof configObject.port === "number" &&
+      configObject.port >= 1000 &&
+      configObject.port <= 9999 &&
+      !usedPorts.includes(configObject.port)
+    ) {
+      this.deviceConfig.port = configObject.port;
+      usedPorts.push(configObject.port);
+    }
+
+    this.deviceConfig.helperRef = {
+      notificationName: "PAGE_CONTROL",
+      icon: "toggles",
+      description:
+        "Exposes a power strip that controls the current MM2 page, you can control them using shorcuts!",
+      docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
+    };
+
     devicesEventStream.on("PAGE_CONTROL", (payload) => {
       console.log(payload);
     });
@@ -198,7 +288,7 @@ class HKPageControllHandler {
 }
 
 // eslint-disable-next-line no-undef
-HKAvailableFeatureHandlers = [
+const HKAvailableFeatureHandlers = [
   ["toggleLyrics", HKToggleLyricsHandler],
   ["accentColor", HKAccentColorHandler],
   ["screenControl", HKScreenControlHandler],

@@ -34,13 +34,26 @@
     .intermitent .col .card {
       animation: intermitent 2000ms ease-in-out 3;
     }
+    .blur {
+      filter: blur(3px);
+    }
     @keyframes intermitent {
-      0%, 100% { box-shadow: rgb(149 157 165 / 18%) 0 8px 24px; }
-      50% { box-shadow: #0d6dfdc7 0 0px 3px; }
+      0%,
+      100% {
+        box-shadow: rgb(149 157 165 / 18%) 0 8px 24px;
+      }
+      50% {
+        box-shadow: #0d6dfdc7 0 0px 3px;
+      }
     }
     @keyframes notifyBackground {
-      0%, 100% { background-color: transparent; }
-      50% { background-color: var(--bs-primary); }
+      0%,
+      100% {
+        background-color: transparent;
+      }
+      50% {
+        background-color: var(--bs-primary);
+      }
     }
   </style>
 </head>
@@ -48,86 +61,140 @@
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
     <symbol id="gear" viewBox="0 0 16 16">
-      <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-      <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+      <path
+        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+      <path
+        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
     </symbol>
     <symbol id="qrcode" viewBox="0 0 16 16">
-      <path d="M2 2h2v2H2z"/>
-      <path d="M6 0v6H0V0zM5 1H1v4h4zM4 12H2v2h2z"/>
-      <path d="M6 10v6H0v-6zm-5 1v4h4v-4zm11-9h2v2h-2z"/>
-      <path d="M10 0v6h6V0zm5 1v4h-4V1zM8 1V0h1v2H8v2H7V1zm0 5V4h1v2zM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8zm0 0v1H2V8H1v1H0V7h3v1zm10 1h-1V7h1zm-1 0h-1v2h2v-1h-1zm-4 0h2v1h-1v1h-1zm2 3v-1h-1v1h-1v1H9v1h3v-2zm0 0h3v1h-2v1h-1zm-4-1v1h1v-2H7v1z"/>
-      <path d="M7 12h1v3h4v1H7zm9 2v2h-3v-1h2v-1z"/>
+      <path d="M2 2h2v2H2z" />
+      <path d="M6 0v6H0V0zM5 1H1v4h4zM4 12H2v2h2z" />
+      <path d="M6 10v6H0v-6zm-5 1v4h4v-4zm11-9h2v2h-2z" />
+      <path
+        d="M10 0v6h6V0zm5 1v4h-4V1zM8 1V0h1v2H8v2H7V1zm0 5V4h1v2zM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8zm0 0v1H2V8H1v1H0V7h3v1zm10 1h-1V7h1zm-1 0h-1v2h2v-1h-1zm-4 0h2v1h-1v1h-1zm2 3v-1h-1v1h-1v1H9v1h3v-2zm0 0h3v1h-2v1h-1zm-4-1v1h1v-2H7v1z" />
+      <path d="M7 12h1v3h4v1H7zm9 2v2h-3v-1h2v-1z" />
     </symbol>
     <symbol id="ethernet" viewBox="0 0 16 16">
-      <path d="M14 13.5v-7a.5.5 0 0 0-.5-.5H12V4.5a.5.5 0 0 0-.5-.5h-1v-.5A.5.5 0 0 0 10 3H6a.5.5 0 0 0-.5.5V4h-1a.5.5 0 0 0-.5.5V6H2.5a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5M3.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m2 0h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zM9.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z"/>
-      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/>
+      <path
+        d="M14 13.5v-7a.5.5 0 0 0-.5-.5H12V4.5a.5.5 0 0 0-.5-.5h-1v-.5A.5.5 0 0 0 10 3H6a.5.5 0 0 0-.5.5V4h-1a.5.5 0 0 0-.5.5V6H2.5a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5M3.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m2 0h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zM9.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25m1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z" />
+      <path
+        d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z" />
     </symbol>
     <symbol id="barcode" viewBox="0 0 16 16">
-        <path d="M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z"/>
+      <path
+        d="M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z" />
     </symbol>
     <symbol id="lightbulb" viewBox="0 0 16 16">
-      <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1"/>
+      <path
+        d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1" />
     </symbol>
     <symbol id="toggles" viewBox="0 0 16 16">
-      <path d="M4.5 9a3.5 3.5 0 1 0 0 7h7a3.5 3.5 0 1 0 0-7zm7 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m-7-14a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5m2.45 0A3.5 3.5 0 0 1 8 3.5 3.5 3.5 0 0 1 6.95 6h4.55a2.5 2.5 0 0 0 0-5zM4.5 0h7a3.5 3.5 0 1 1 0 7h-7a3.5 3.5 0 1 1 0-7"/>
+      <path
+        d="M4.5 9a3.5 3.5 0 1 0 0 7h7a3.5 3.5 0 1 0 0-7zm7 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m-7-14a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5m2.45 0A3.5 3.5 0 0 1 8 3.5 3.5 3.5 0 0 1 6.95 6h4.55a2.5 2.5 0 0 0 0-5zM4.5 0h7a3.5 3.5 0 1 1 0 7h-7a3.5 3.5 0 1 1 0-7" />
     </symbol>
     <symbol id="toggle" viewBox="0 0 16 16">
-      <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+      <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8" />
     </symbol>
     <symbol id="info" viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+      <path
+        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
     </symbol>
     <symbol id="select" viewBox="0 0 16 16">
-      <path d="M2 10h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1m9-9h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm0-10a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM2 9a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2zm7 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM0 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.354.854a.5.5 0 1 0-.708-.708L3 3.793l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0z"/>
+      <path
+        d="M2 10h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1m9-9h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm0-10a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM2 9a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2zm7 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM0 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.354.854a.5.5 0 1 0-.708-.708L3 3.793l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
     </symbol>
     <symbol id="filetext" viewBox="0 0 16 16">
-      <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/>
-      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
+      <path
+        d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
+      <path
+        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
     </symbol>
     <symbol id="boxarrowup" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/>
-      <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+      <path fill-rule="evenodd"
+        d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z" />
+      <path fill-rule="evenodd"
+        d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z" />
     </symbol>
     <symbol id="boxarrowdown" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z"/>
-      <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z"/>
+      <path fill-rule="evenodd"
+        d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z" />
+      <path fill-rule="evenodd"
+        d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z" />
     </symbol>
     <symbol id="person-gear" viewBox="0 0 16 16">
-      <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
+      <path
+        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
     </symbol>
     <symbol id="x" viewBox="0 0 16 16">
-      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      <path
+        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
     </symbol>
     <symbol id="code" viewBox="0 0 16 16">
-      <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0"/>
+      <path
+        d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0" />
     </symbol>
     <symbol id="fabrizz" viewBox="0 0 231 40">
-      <path d="M61.4171 6.74286V20.3429H76.16V22.2857H61.4171V37.1429H59.0629V4.8H78.4457V6.74286H61.4171Z" fill="#020B0D"/>
-      <path d="M99.9903 25.3943L93.4075 9.05143C93.1789 8.51809 92.958 7.87809 92.7446 7.13143C92.6532 7.49714 92.5542 7.84762 92.4475 8.18286C92.3408 8.50286 92.2265 8.8 92.1046 9.07428L85.5218 25.3943H99.9903ZM107.145 37.1429H105.339C105.126 37.1429 104.95 37.0895 104.813 36.9829C104.676 36.861 104.569 36.7086 104.493 36.5257L100.699 27.1314H84.8132L81.0189 36.5257C80.958 36.6933 80.8513 36.8381 80.6989 36.96C80.5465 37.0819 80.3637 37.1429 80.1503 37.1429H78.3675L91.6018 4.8H93.9103L107.145 37.1429Z" fill="#020B0D"/>
-      <path d="M123.203 35.2686C126.037 35.2686 128.178 34.659 129.626 33.44C131.089 32.2057 131.82 30.4762 131.82 28.2514C131.82 27.2305 131.622 26.3162 131.226 25.5086C130.845 24.6857 130.289 23.9924 129.557 23.4286C128.826 22.8495 127.927 22.4076 126.86 22.1029C125.793 21.7981 124.582 21.6457 123.226 21.6457H115.089V35.2686H123.203ZM115.089 6.65143V19.9314H122.083C123.576 19.9314 124.849 19.741 125.9 19.36C126.967 18.979 127.835 18.4762 128.506 17.8514C129.191 17.2267 129.694 16.5181 130.014 15.7257C130.334 14.9333 130.494 14.1181 130.494 13.28C130.494 11.101 129.801 9.45524 128.414 8.34285C127.043 7.21524 124.917 6.65143 122.037 6.65143H115.089ZM122.037 4.8C123.881 4.8 125.481 4.98286 126.837 5.34857C128.193 5.71428 129.313 6.25524 130.197 6.97143C131.081 7.67238 131.736 8.53333 132.163 9.55429C132.59 10.5752 132.803 11.7333 132.803 13.0286C132.803 13.8819 132.65 14.7048 132.346 15.4971C132.056 16.2895 131.63 17.021 131.066 17.6914C130.517 18.3619 129.831 18.9486 129.009 19.4514C128.201 19.939 127.271 20.3124 126.22 20.5714C128.765 20.9371 130.715 21.7829 132.071 23.1086C133.443 24.419 134.129 26.1486 134.129 28.2971C134.129 29.6686 133.885 30.9029 133.397 32C132.909 33.0971 132.201 34.0267 131.271 34.7886C130.342 35.5505 129.199 36.1371 127.843 36.5486C126.487 36.9448 124.948 37.1429 123.226 37.1429H112.734V4.8H122.037Z" fill="#020B0D"/>
-      <path d="M149.801 20.7771C151.233 20.7771 152.513 20.6095 153.641 20.2743C154.784 19.9238 155.744 19.4286 156.521 18.7886C157.313 18.1486 157.915 17.379 158.327 16.48C158.738 15.5809 158.944 14.5676 158.944 13.44C158.944 11.139 158.19 9.43238 156.681 8.32C155.188 7.20762 153.001 6.65143 150.121 6.65143H144.201V20.7771H149.801ZM164.155 37.1429H162.144C161.885 37.1429 161.664 37.1048 161.481 37.0286C161.313 36.9371 161.153 36.7771 161.001 36.5486L150.624 23.4286C150.502 23.261 150.372 23.1162 150.235 22.9943C150.113 22.8724 149.969 22.781 149.801 22.72C149.649 22.6438 149.458 22.5905 149.23 22.56C149.016 22.5295 148.75 22.5143 148.43 22.5143H144.201V37.1429H141.847V4.8H150.121C153.839 4.8 156.62 5.52381 158.464 6.97143C160.323 8.40381 161.252 10.5143 161.252 13.3029C161.252 14.5371 161.039 15.6648 160.612 16.6857C160.186 17.7067 159.569 18.6057 158.761 19.3829C157.969 20.1448 157.001 20.7695 155.858 21.2571C154.731 21.7448 153.458 22.0724 152.041 22.24C152.407 22.4686 152.734 22.7733 153.024 23.1543L164.155 37.1429Z" fill="#020B0D"/>
-      <path d="M172.197 37.1429H169.843V4.8H172.197V37.1429Z" fill="#020B0D"/>
-      <path d="M202.769 5.6C202.769 5.88952 202.662 6.2019 202.449 6.53714L181.923 35.2H202.609V37.1429H178.791V36.2971C178.791 36.1295 178.814 35.9848 178.86 35.8629C178.921 35.7257 178.99 35.5962 179.066 35.4743L199.637 6.74286H179.386V4.8H202.769V5.6Z" fill="#020B0D"/>
-      <path d="M230.319 5.6C230.319 5.88952 230.212 6.2019 229.999 6.53714L209.473 35.2H230.159V37.1429H206.341V36.2971C206.341 36.1295 206.364 35.9848 206.41 35.8629C206.471 35.7257 206.539 35.5962 206.616 35.4743L227.187 6.74286H206.936V4.8H230.319V5.6Z" fill="#020B0D"/>
-      <path d="M40 8C40 12.4183 36.4183 16 32 16C27.5817 16 24 12.4183 24 8C24 3.58172 27.5817 0 32 0C36.4183 0 40 3.58172 40 8Z" fill="#020B0D"/>
-      <path d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8Z" fill="#020B0D"/>
-      <path d="M16 32C16 36.4183 12.4183 40 8 40C3.58172 40 0 36.4183 0 32C0 27.5817 3.58172 24 8 24C12.4183 24 16 27.5817 16 32Z" fill="#020B0D"/>
+      <path d="M61.4171 6.74286V20.3429H76.16V22.2857H61.4171V37.1429H59.0629V4.8H78.4457V6.74286H61.4171Z"
+        fill="#020B0D" />
+      <path
+        d="M99.9903 25.3943L93.4075 9.05143C93.1789 8.51809 92.958 7.87809 92.7446 7.13143C92.6532 7.49714 92.5542 7.84762 92.4475 8.18286C92.3408 8.50286 92.2265 8.8 92.1046 9.07428L85.5218 25.3943H99.9903ZM107.145 37.1429H105.339C105.126 37.1429 104.95 37.0895 104.813 36.9829C104.676 36.861 104.569 36.7086 104.493 36.5257L100.699 27.1314H84.8132L81.0189 36.5257C80.958 36.6933 80.8513 36.8381 80.6989 36.96C80.5465 37.0819 80.3637 37.1429 80.1503 37.1429H78.3675L91.6018 4.8H93.9103L107.145 37.1429Z"
+        fill="#020B0D" />
+      <path
+        d="M123.203 35.2686C126.037 35.2686 128.178 34.659 129.626 33.44C131.089 32.2057 131.82 30.4762 131.82 28.2514C131.82 27.2305 131.622 26.3162 131.226 25.5086C130.845 24.6857 130.289 23.9924 129.557 23.4286C128.826 22.8495 127.927 22.4076 126.86 22.1029C125.793 21.7981 124.582 21.6457 123.226 21.6457H115.089V35.2686H123.203ZM115.089 6.65143V19.9314H122.083C123.576 19.9314 124.849 19.741 125.9 19.36C126.967 18.979 127.835 18.4762 128.506 17.8514C129.191 17.2267 129.694 16.5181 130.014 15.7257C130.334 14.9333 130.494 14.1181 130.494 13.28C130.494 11.101 129.801 9.45524 128.414 8.34285C127.043 7.21524 124.917 6.65143 122.037 6.65143H115.089ZM122.037 4.8C123.881 4.8 125.481 4.98286 126.837 5.34857C128.193 5.71428 129.313 6.25524 130.197 6.97143C131.081 7.67238 131.736 8.53333 132.163 9.55429C132.59 10.5752 132.803 11.7333 132.803 13.0286C132.803 13.8819 132.65 14.7048 132.346 15.4971C132.056 16.2895 131.63 17.021 131.066 17.6914C130.517 18.3619 129.831 18.9486 129.009 19.4514C128.201 19.939 127.271 20.3124 126.22 20.5714C128.765 20.9371 130.715 21.7829 132.071 23.1086C133.443 24.419 134.129 26.1486 134.129 28.2971C134.129 29.6686 133.885 30.9029 133.397 32C132.909 33.0971 132.201 34.0267 131.271 34.7886C130.342 35.5505 129.199 36.1371 127.843 36.5486C126.487 36.9448 124.948 37.1429 123.226 37.1429H112.734V4.8H122.037Z"
+        fill="#020B0D" />
+      <path
+        d="M149.801 20.7771C151.233 20.7771 152.513 20.6095 153.641 20.2743C154.784 19.9238 155.744 19.4286 156.521 18.7886C157.313 18.1486 157.915 17.379 158.327 16.48C158.738 15.5809 158.944 14.5676 158.944 13.44C158.944 11.139 158.19 9.43238 156.681 8.32C155.188 7.20762 153.001 6.65143 150.121 6.65143H144.201V20.7771H149.801ZM164.155 37.1429H162.144C161.885 37.1429 161.664 37.1048 161.481 37.0286C161.313 36.9371 161.153 36.7771 161.001 36.5486L150.624 23.4286C150.502 23.261 150.372 23.1162 150.235 22.9943C150.113 22.8724 149.969 22.781 149.801 22.72C149.649 22.6438 149.458 22.5905 149.23 22.56C149.016 22.5295 148.75 22.5143 148.43 22.5143H144.201V37.1429H141.847V4.8H150.121C153.839 4.8 156.62 5.52381 158.464 6.97143C160.323 8.40381 161.252 10.5143 161.252 13.3029C161.252 14.5371 161.039 15.6648 160.612 16.6857C160.186 17.7067 159.569 18.6057 158.761 19.3829C157.969 20.1448 157.001 20.7695 155.858 21.2571C154.731 21.7448 153.458 22.0724 152.041 22.24C152.407 22.4686 152.734 22.7733 153.024 23.1543L164.155 37.1429Z"
+        fill="#020B0D" />
+      <path d="M172.197 37.1429H169.843V4.8H172.197V37.1429Z" fill="#020B0D" />
+      <path
+        d="M202.769 5.6C202.769 5.88952 202.662 6.2019 202.449 6.53714L181.923 35.2H202.609V37.1429H178.791V36.2971C178.791 36.1295 178.814 35.9848 178.86 35.8629C178.921 35.7257 178.99 35.5962 179.066 35.4743L199.637 6.74286H179.386V4.8H202.769V5.6Z"
+        fill="#020B0D" />
+      <path
+        d="M230.319 5.6C230.319 5.88952 230.212 6.2019 229.999 6.53714L209.473 35.2H230.159V37.1429H206.341V36.2971C206.341 36.1295 206.364 35.9848 206.41 35.8629C206.471 35.7257 206.539 35.5962 206.616 35.4743L227.187 6.74286H206.936V4.8H230.319V5.6Z"
+        fill="#020B0D" />
+      <path
+        d="M40 8C40 12.4183 36.4183 16 32 16C27.5817 16 24 12.4183 24 8C24 3.58172 27.5817 0 32 0C36.4183 0 40 3.58172 40 8Z"
+        fill="#020B0D" />
+      <path
+        d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8Z"
+        fill="#020B0D" />
+      <path
+        d="M16 32C16 36.4183 12.4183 40 8 40C3.58172 40 0 36.4183 0 32C0 27.5817 3.58172 24 8 24C12.4183 24 16 27.5817 16 32Z"
+        fill="#020B0D" />
     </symbol>
     <symbol id="arrow-circle-right" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+      <path fill-rule="evenodd"
+        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+    </symbol>
+    <symbol id="modem" viewBox="0 0 16 16">
+      <path
+        d="M5.5 1.5A1.5 1.5 0 0 1 7 0h2a1.5 1.5 0 0 1 1.5 1.5v11a1.5 1.5 0 0 1-1.404 1.497c.35.305.872.678 1.628 1.056A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.224-.947c.756-.378 1.277-.75 1.628-1.056A1.5 1.5 0 0 1 5.5 12.5zM7 1a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-11A.5.5 0 0 0 9 1z"/>
+      <path
+        d="M8.5 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+    </symbol>
+    <symbol id="filedelete" viewBox="0 0 16 16">
+      <path
+        d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.854 7.146 8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 1 1 .708-.708"/>
+    </symbol>
+    <symbol id="checkcircle" viewBox="0 0 16 16">
+      <path
+        d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+      <path
+        d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
     </symbol>
   </svg>
 
   <a class="container mt-4 d-flex justify-content-center px-2" target="_blank" href="https://fabriz.co">
     <svg xmlns="http://www.w3.org/2000/svg" height="22" width="120" fill="currentColor">
-       <use xlink:href="#fabrizz"></use>
+      <use xlink:href="#fabrizz"></use>
     </svg>
   </a>
   <div class="container mt-4 mb-3">
     <div class="position-relative p-5 text-muted bg-body border border-dashed rounded-5" style="user-select: none;">
       <button type="button"
-        class="position-absolute d-flex top-0 end-0 p-3 btn m-3 bg-secondary bg-opacity-10 rounded-pill">
+        class="position-absolute d-flex top-0 end-0 p-3 btn m-3 bg-secondary bg-opacity-10 rounded-pill"
+        data-bs-toggle="modal" data-bs-target="#configModal">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi">
           <use xlink:href="#gear"></use>
         </svg>
@@ -136,168 +203,324 @@
         <img src="./assets/homekit-logo.png" alt="" class="shadow-lg rounded-3" height="54">
       </div>
       <h1 class="text-body-emphasis">MMM-HomeKit</h1>
-      <h6 class="text-body-emphasis">Configuration helper</h6>
+      <h6 class="text-body-emphasis" data-translate="CH_CTA_SUBTITLE">Configuration helper</h6>
       <p class="col-lg-8 mb-4">
-        This page will help you adding the virtual devices to Homekit. You should see your devices below, click any card to see the device data and HK code. To restart the Homekit information, click on the <span style="display: inline-flex; width: 1rem; height: 1rem;">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" style="margin-top: 2px;">
-          <use xlink:href="#gear"></use>
-        </svg>
+        <span data-translate="CH_CTA_BODY">This page will help you adding the virtual devices to Homekit. You should see your devices below, click any card
+        to see the device data and HK code. To restart the Homekit information, click on the</span> <span
+          style="display: inline-flex; width: 1rem; height: 1rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" style="margin-top: 2px;">
+            <use xlink:href="#gear"></use>
+          </svg>
         </span>.
       </p>
       <div class="d-flex mt-3 gap-2 flex-wrap" style="margin-bottom: -0.25rem">
-        <button type="button" class="btn btn-primary d-flex align-items-center gap-2 t-start text-nowrap rounded-4 px-3" data-bs-toggle="modal" data-bs-target="#ctaModal">
+        <button type="button" class="btn btn-primary d-flex align-items-center gap-2 t-start text-nowrap rounded-4 px-3"
+          data-bs-toggle="modal" data-bs-target="#ctaModal">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
             <use xlink:href="#select"></use>
           </svg>
-          Add devices to Homekit
+          <span data-translate="CH_CTA_BTN_ADD">Add devices to Homekit</span>
         </button>
-        <a type="button" href="https://github.com/Fabrizz/MMM-HomeKit" target="_blank" class="btn rounded-4 btn-outline-primary d-flex align-items-center gap-2 t-start text-nowrap">
+        <a type="button" href="https://github.com/Fabrizz/MMM-HomeKit" target="_blank"
+          class="btn rounded-4 btn-outline-primary d-flex align-items-center gap-2 t-start text-nowrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
             <use xlink:href="#filetext"></use>
           </svg>
-          View module documentation
+          <span data-translate="CH_CTA_BTN_DOCS">View module documentation</span>
         </a>
       </div>
     </div>
   </div>
 
   <div class="container py-2">
-    <h3 style="margin-bottom: 0px;">Devices loaded:</h3>
+    <h3 style="margin-bottom: 0px;" data-translate="CH_DEVICESLOADED">Devices loaded:</h3>
     <div id="placeholder-card">
       <div class="alert alert-warning mt-3 rounded-4 p-4" role="alert">
         <h4 class="alert-heading d-flex align-items-center gap-2">
           <div class="spinner-border" aria-hidden="true"></div>
-          <span>Waiting for devices to load...</span>
+          <span data-translate="CH_WAITING">Waiting for devices to load...</span>
         </h4>
-        <p style="margin-bottom: -5px;">Is MagicMirror² loaded correctly? Check if the module frontend loaded correctly!.</p>
+        <p style="margin-bottom: -5px;" data-translate="CH_WAITING_BODY">Is MagicMirror² loaded correctly? Check if the module frontend loaded
+          correctly!.</p>
       </div>
     </div>
     <div class="row row-cols-1 row-cols-md-2 g-3 mt-1" id="appendable-card"></div>
   </div>
 
   <div class="container py-2 mt-4">
-    <h3>Received Data:</h3>
+    <h3 data-translate="CH_RECIEVEDDATA">Received Data:</h3>
   </div>
-    <div class="px-4 mb-5" style="overflow-x: auto; max-width: 1600px; margin: auto;">
-      <table class="table" style="white-space: nowrap;">
-        <thead>
-          <tr>
-            <th scope="col" style="min-width: 200px;">Type</th>
-            <th scope="col" style="min-width: 140px;">Timestamp</th>
-            <th scope="col" style="min-width: 200px;">Payload</th>
-          </tr>
-        </thead>
-        <tbody id="appendable-messages"></tbody>
-      </table>
-    </div>
+  <div class="px-4 mb-5" style="overflow-x: auto; max-width: 1600px; margin: auto;">
+    <table class="table" style="white-space: nowrap;">
+      <thead>
+        <tr>
+          <th scope="col" style="min-width: 200px;" data-translate="CH_TYPE">Type</th>
+          <th scope="col" style="min-width: 140px;" data-translate="CH_TIMESTAMP">Timestamp</th>
+          <th scope="col" style="min-width: 200px;" data-translate="CH_PAYLOAD">Payload</th>
+        </tr>
+      </thead>
+      <tbody id="appendable-messages"></tbody>
+    </table>
+  </div>
 
   <div class="modal fade" id="deviceModal" aria-labelledby="deviceModalLabel" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg modal-fullscreen-lg-down justify-content-center flex-column" id="deviceModalTarget"></div>
+    <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg modal-fullscreen-lg-down justify-content-center flex-column"
+      id="deviceModalTarget"></div>
   </div>
 
   <div class="modal fade" id="ctaModal" tabindex="-1" aria-labelledby="ctaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
       <div class="modal-content rounded-5">
         <div class="modal-body">
+          <div class="mx-3 pt-2">
+            <h4 class="mb-3" id="ctaModalLabel" data-translate="CH_MODAL_ADD_TITLE">Adding devices to Homekit</h4>
+            <p style="padding: 0; margin: 0;" data-translate="CH_MODAL_ADD_BODY">If you can see this message, the module has loaded correctly! Click on any
+              of the device cards to add them to Homekit.</p>
+          </div>
+        </div>
+        <div class="modal-footer d-block">
+          <div class="d-grid gap-2">
+            <button type="button"
+              class="btn btn-primary px-3 d-flex justify-content-between align-items-center rounded-4 gap-2"
+              data-bs-dismiss="modal">
+              <span data-translate="CH_MODAL_ADD_BTN">Lets go</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                <use xlink:href="#arrow-circle-right"></use>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="configModalData" tabindex="-1" aria-labelledby="configModalDataLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable modal-fullscreen-sm-down">
+      <div class="modal-content rounded-5">
+        <div class="modal-body">
+          <div class="mx-2 py-2">
+            <ul class="nav nav-pills mb-3 gap-1 align-items-center justify-content-center" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded-4" id="pills-devices-tab" data-bs-toggle="pill" data-bs-target="#pills-devices" type="button" role="tab" aria-controls="pills-devices" aria-selected="true" data-translate="CH_MODAL_DATA_DEVICE">Device objects</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-4" id="pills-translations-tab" data-bs-toggle="pill" data-bs-target="#pills-translations" type="button" role="tab" aria-controls="pills-translations" aria-selected="false" data-translate="CH_MODAL_DATA_TRANSLATIONS">Translations</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button disabled class="nav-link rounded-4" id="pills-other-tab" data-bs-toggle="pill" data-bs-target="#pills-other" type="button" role="tab" aria-controls="pills-other" aria-selected="false" data-translate="CH_MODAL_DATA_OTHER">Other</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-devices" role="tabpanel" aria-labelledby="pills-devices-tab" tabindex="0">
+                <code class="d-block p-3 border border-primary-subtle rounded-4 t-code-devices"></code>
+              </div>
+              <div class="tab-pane fade" id="pills-translations" role="tabpanel" aria-labelledby="pills-translations-tab" tabindex="0">
+                <code class="d-block p-3 border border-primary-subtle rounded-4 t-code-translations"></code>
+              </div>
+              <div class="tab-pane fade" id="pills-other" role="tabpanel" aria-labelledby="pills-other-tab" tabindex="0">
+                <code class="d-block p-3 border border-primary-subtle rounded-4 t-code-other"></code>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-block">
+            <div class="d-grid gap-2">
+              <button class="btn btn-secondary px-3 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button" data-bs-toggle="modal" data-bs-target="#configModal">
+                <span data-translate="CH_MODAL_DATA_BTN_BACK">Go back</span>
+                <svg xmlns="http://www.w3.org/2000/svg" style="rotate: 180deg;" width="16" height="16" fill="currentColor" class="bi" >
+                  <use xlink:href="#arrow-circle-right"></use>
+                </svg>
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="configModalDelete" tabindex="-1" aria-labelledby="configModalDeleteLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down">
+      <div class="modal-content rounded-5">
+        <div class="modal-body">
+          <div class="mx-3 pt-2 pb-1">
+            <h4 class="mb-2" id="configModalDeleteLabel" data-translate="CH_MODAL_DELETE_TITLE">Removing Homekit data</h4>
+            <h6 class="mb-3" data-translate="CH_MODAL_DELETE_SUBTITLE">All accessories will be erased from the store</h4>
+            <div class="alert alert-danger rounded-4 border border-light py-3 px-4" role="alert" data-translate="CH_MODAL_DELETE_NOTICE">
+              IMPORTANT: You will have to remove all of your current configured accessories from the Home app and add them again. Not removing the devices from the Home app could create phantom accessories.
+            </div>
+            <p style="padding: 0; margin: 0;" data-translate="CH_MODAL_DELETE_BODY">If you want to remove one accessory, you can do it in the config.json file. This options is usefull if you are migrating to the experimental bridge or changing pincodes, ports, etc. Read more in the documentation.</p>
+          </div>
+        </div>
+        <div class="modal-footer d-block">
+            <div class="d-grid gap-2">
+              <a href="https://github.com/fabriz/MMM-HomeKit" class="btn btn-outline-primary px-3 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button">
+                <span data-translate="CH_MODAL_DELETE_BTN_DOCS">View documentation</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#filetext"></use>
+                </svg>
+              </a>
+              <button class="btn btn-danger px-3 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button" id="hk-remove-data">
+                <span data-translate="CH_MODAL_DELETE_BTN_DELETE" id="hk-remove-data-tx">Remove homekit data</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi t-icon">
+                  <use id="hk-remove-data-use" xlink:href="#filedelete"></use>
+                </svg>
+                <div class="spinner-border spinner-border-sm d-none" role="status"></div>
+              </button>
+              <button class="btn btn-secondary px-3 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button" data-bs-toggle="modal" data-bs-target="#configModal">
+                <span data-translate="CH_MODAL_DELETE_BTN_BACK">Go back</span>
+                <svg xmlns="http://www.w3.org/2000/svg" style="rotate: 180deg;" width="16" height="16" fill="currentColor" class="bi" >
+                  <use xlink:href="#arrow-circle-right"></use>
+                </svg>
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down">
+      <div class="modal-content rounded-5">
+        <div class="modal-body">
+          <img src="./assets/homekit-card.png" width="100%" class="rounded-4 mb-2">
+          <img src="./assets/fabrizz-bar.png" width="100%" class="mb-2">
           <div class="mx-3 py-2">
-            <h4 class="mb-3" id="ctaModalLabel">Adding devices to Homekit</h4>
-            <p style="padding: 0; margin: 0;">If you can see this message, the module has loaded correctly! Click on any of the device cards to add them to Homekit.</p>
+            <h4 class="mb-3" id="configModalLabel" data-translate="CH_MODAL_CONFIG_TITLE">General settings</h4>
+
+            <h6 class="mb-2" id="configModalLabel" data-translate="CH_MODAL_CONFIG_DATA_TITLE">View loaded device, translation data</h4>
+            <p class="mb-2" style="padding: 0; margin: 0;" data-translate="CH_MODAL_CONFIG_DATA_BODY">View data sent from the frontend. Includes translations, devices and bridges.</p>
+            <div class="d-grid gap-2 mb-4">
+              <button class="btn btn-sm btn-outline-primary px-2 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button" data-bs-toggle="modal" data-bs-target="#configModalData">
+                <span data-translate="CH_MODAL_CONFIG_DATA_BNT" class="px-1">View loaded data</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#arrow-circle-right"></use>
+                </svg>
+              </button>
+            </div>
+
+            <h6 class="mb-2" id="configModalLabel" data-translate="CH_MODAL_CONFIG_DELETE_TITLE">Overwritte HAP configuration</h4>
+            <p class="mb-2" style="padding: 0; margin: 0;" data-translate="CH_MODAL_CONFIG_DELETE_BODY">To change Homekit accessory settings (like port or bridge), you need to delete all accessory data and restart the module to rebuild the HAP store.</p>
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm btn-outline-danger px-2 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button" data-bs-toggle="modal" data-bs-target="#configModalDelete">
+                <span data-translate="CH_MODAL_CONFIG_DELETE_BTN" class="px-1">Read more & delete Homekit data</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#arrow-circle-right"></use>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary px-3 d-flex justify-content-center align-items-center rounded-4 gap-2" data-bs-dismiss="modal">
-            <span>Lets go</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-              <use xlink:href="#arrow-circle-right"></use>
-            </svg>
-          </button>
+              <a href="https://github.com/fabriz/MMM-HomeKit" class="btn btn-outline-primary px-3 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button">
+                <span data-translate="CH_MODAL_CONFIG_BTN_DOCS">View documentation</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#filetext"></use>
+                </svg>
+              </a>
+              <button class="btn btn-secondary px-3 d-flex justify-content-between align-items-center rounded-4 gap-2" type="button" data-bs-dismiss="modal">
+                <span data-translate="CH_MODAL_CONFIG_BTN_CLOSE">Close</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" >
+                  <use xlink:href="#x"></use>
+                </svg>
+              </button>
         </div>
       </div>
     </div>
   </div>
 
   <template id="card-col-template">
-      <div class="col">
-        <div class="card rounded-5 p-2 cardHover border-light position-relative" style="height: 100%;">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title d-flex align-items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-                <use class="t-icon" xlink:href="#gear"></use>
-              </svg>
-              <span class="flex1">
-                <span class="t-name"></span>
-                <span class="t-mat fw-light" style="font-size: 0.9rem !important;"></span>
-              </span>
-              <span style="font-size: 1rem !important;" class="t-badge"></span>
-            </h5>
-            <p class="card-text t-description p-1 flex1" style="margin-bottom: 0.52rem !important;"></p>
-            <div class="d-flex" style="margin-bottom: -2px;">
-              <ul class="list-group list-group-horizontal text-nowrap me-auto" style="z-index: 10;">
-                <li class="list-group-item t-pincode text-nowrap rounded-4" style="font-weight: 500;"></li>
-              </ul>
-              <div class="d-flex gap-2">
-              <a type="button" target="_blank" class="t-btn-docs btn btn-outline-primary d-flex align-items-center gap-2 t-start rounded-4" style="z-index: 10;">
+    <div class="col">
+      <div class="card rounded-5 p-2 cardHover border-light position-relative" style="height: 100%;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title d-flex align-items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+              <use class="t-icon" xlink:href="#gear"></use>
+            </svg>
+            <span class="flex1">
+              <span class="t-name"></span>
+              <span class="t-mat fw-light" style="font-size: 0.9rem !important;"></span>
+            </span>
+            <span style="font-size: 1rem !important;" class="t-badge"></span>
+          </h5>
+          <p class="card-text t-description p-1 flex1" style="margin-bottom: 0.52rem !important;"></p>
+          <div class="d-flex" style="margin-bottom: -2px;">
+            <ul class="list-group list-group-horizontal text-nowrap me-auto" style="z-index: 10;">
+              <li class="list-group-item t-pincode text-nowrap rounded-4" style="font-weight: 500;"></li>
+            </ul>
+            <div class="d-flex gap-2">
+              <a type="button" target="_blank"
+                class="t-btn-docs btn btn-outline-primary d-flex align-items-center gap-2 t-start rounded-4"
+                style="z-index: 10;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
                   <use xlink:href="#filetext"></use>
                 </svg>
               </a>
-                <button type="button" class="t-btn-info btn btn-outline-primary d-flex align-items-center gap-2 t-start rounded-4 stretched-link" data-bs-toggle="modal" data-bs-target="#deviceModal">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-                    <use xlink:href="#info"></use>
-                  </svg>
-                </button>
-              </div>
+              <button type="button"
+                class="t-btn-info btn btn-outline-primary d-flex align-items-center gap-2 t-start rounded-4 stretched-link"
+                data-bs-toggle="modal" data-bs-target="#deviceModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+                  <use xlink:href="#info"></use>
+                </svg>
+              </button>
             </div>
           </div>
-          <div style="background-color: transparent; height: 4px; width: 88%; top: -2px; left: 6%;" class="line rounded-3 position-absolute"></div>
         </div>
+        <div style="background-color: transparent; height: 4px; width: 88%; top: -2px; left: 6%;"
+          class="line rounded-3 position-absolute"></div>
       </div>
+    </div>
   </template>
 
   <template id="device-modal-template">
     <div class="modal-content rounded-5">
-      <div style="background-color: transparent; height: 4px; width: 88%; left: 6%; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;" class="line position-absolute"></div>
+      <div
+        style="background-color: transparent; height: 4px; width: 88%; left: 6%; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;"
+        class="line position-absolute"></div>
       <div class="modal-body">
         <div class="mx-3 py-2">
           <h5 class="t-displayn" style="margin: 0;" id="deviceModalLabel"></h5>
           <p class="t-description fw-light" style="margin: 0;"></p>
         </div>
-        <div class="d-flex justify-content-center gap-4 align-items-center mt-4" style="margin: auto;">
+        <div class="d-flex justify-content-center gap-4 align-items-center mt-4 t-intdata" style="margin: auto;">
           <div class="t-hkcode px-2" style="width: 9.4rem;"></div>
           <ul class="list-group list-group-flush rounded-3" style="min-width: 200px;">
             <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi"
+                style="margin-left: -8px;">
                 <use xlink:href="#barcode"></use>
               </svg>
               <div>
-                <div class="fw-light">Pincode</div>
+                <div class="fw-light" data-translate="CH_MODAL_DEVICE_PINCODE">Pincode</div>
                 <span class="t-pincode"></span>
               </div>
             </li>
             <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi"
+                style="margin-left: -8px;">
                 <use xlink:href="#person-gear"></use>
               </svg>
               <div>
-                <div class="fw-light">Username</div>
+                <div class="fw-light" data-translate="CH_MODAL_DEVICE_USERNAME">Username</div>
                 <span class="t-username"></span>
               </div>
             </li>
             <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi"
+                style="margin-left: -8px;">
                 <use xlink:href="#ethernet"></use>
               </svg>
               <div>
-                <div class="fw-light">Port</div>
+                <div class="fw-light" data-translate="CH_MODAL_DEVICE_PORT">Port</div>
                 <span class="t-port"></span>
               </div>
             </li>
             <li class="list-group-item fs-6 fw-semibold d-flex gap-3 align-items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" style="margin-left: -8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi"
+                style="margin-left: -8px;">
                 <use xlink:href="#code"></use>
               </svg>
               <div>
-                <div class="fw-light">Setup URI</div>
+                <div class="fw-light" data-translate="CH_MODAL_DEVICE_URI">Setup URI</div>
                 <span class="t-uri"></span>
               </div>
             </li>
@@ -307,7 +530,7 @@
           <table class="table">
             <tbody>
               <tr>
-                <th class="fw-light">Integration by</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_INTEGRATION">Integration by</th>
                 <td class="fw-semibold">
                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="100" fill="currentColor">
                     <use xlink:href="#fabrizz"></use>
@@ -315,27 +538,27 @@
                 </td>
               </tr>
               <tr>
-                <th class="fw-light">State</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_STATE">State</th>
                 <td class="fw-semibold t-state"></td>
               </tr>
               <tr>
-                <th class="fw-light">Device</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_DEVICE">Device</th>
                 <td class="fw-semibold t-device"></td>
               </tr>
               <tr>
-                <th class="fw-light">Device Handler</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_HANDLER">Device Handler</th>
                 <td class="fw-semibold t-handler"></td>
               </tr>
               <tr>
-                <th class="fw-light">Device Notification</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_NOTIFICATION">Device Notification</th>
                 <td class="fw-semibold t-notification"></td>
               </tr>
               <tr>
-                <th class="fw-light">Identifying Material</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_IDMATERIAL">Identifying Material</th>
                 <td class="fw-semibold t-idmaterial"></td>
               </tr>
               <tr>
-                <th class="fw-light">Category</th>
+                <th class="fw-light" data-translate="CH_MODAL_DEVICE_CATEGORY">Category</th>
                 <td class="fw-semibold t-category"></td>
               </tr>
             </tbody>
@@ -344,31 +567,35 @@
 
       </div>
       <div class="modal-footer px-3">
-          <a type="button" target="_blank" class="t-docs btn btn-outline-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-              <use xlink:href="#filetext"></use>
-            </svg>
-            Documentation
-          </a>
-          <button type="button" class="btn btn-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap d-none d-sm-flex" data-bs-dismiss="modal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-              <use xlink:href="#gear"></use>
-            </svg>
-            General configuration
-          </button>
-          <button type="button" class="btn btn-secondary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap" data-bs-dismiss="modal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
-              <use xlink:href="#x"></use>
-            </svg>
-            Close
-          </button>
+        <a type="button" target="_blank"
+          class="t-docs btn btn-outline-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+            <use xlink:href="#filetext"></use>
+          </svg>
+          <span data-translate="CH_MODAL_DEVICE_BTN_DOCS">Documentation</span>
+        </a>
+        <button type="button"
+          class="btn btn-primary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap d-none d-sm-flex"
+          data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#configModal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+            <use xlink:href="#gear"></use>
+          </svg>
+          <span data-translate="CH_MODAL_DEVICE_BTN_GENERALCONFIG">General configuration</span>
+        </button>
+        <button type="button" class="btn btn-secondary rounded-4 d-flex align-items-center gap-2 t-start text-nowrap"
+          data-bs-dismiss="modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi">
+            <use xlink:href="#x"></use>
+          </svg>
+          <span data-translate="CH_MODAL_DEVICE_BTN_CLOSE">Close</span>
+        </button>
       </div>
     </div>
-     <div class="text-center lead p-1 d-none d-lg-block" style="font-size: 0.86rem !important; color: white;">
+    <div class="text-center lead p-1 d-none d-lg-block" style="font-size: 0.86rem !important; color: white;">
       <span class="t-manufacturer"></span> |
       <span class="t-model"></span> |
-      <span class="t-serial"></span> |
-      <span class="t-version"></span>
+      <span class="t-version"></span> |
+      <span class="t-serial"></span>
     </div>
   </template>
 
@@ -388,4 +615,5 @@
 </body>
 <script src="./qrcode.js"></script>
 <script src="./logic.js"></script>
+
 </html>
