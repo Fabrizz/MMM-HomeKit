@@ -43,6 +43,8 @@ class BasicBridge {
     this.accessory.on("paired", this.setPaired.bind(this));
     this.accessory.on("unpaired", this.setUnpaired.bind(this));
     this.accessory.on("identify", this.setIdentify.bind(this));
+
+    // this.accessory.publish({bind});
   }
   setPaired() {
     this.events.emit("paired");

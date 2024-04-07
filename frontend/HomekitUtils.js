@@ -55,3 +55,15 @@ class HKEventEmmiter {
 function HKTranslateAll(translate, list) {
   return Object.fromEntries(list.map((x) => [x, translate(x)]));
 }
+
+/**
+ * Translates the given key using the provided translate function. If the translation is not available, the fallback value is returned.
+ * @param {Function} translate - The translate function to use for translating the key.
+ * @param {string} key - The key to translate.
+ * @param {string} fallback - The fallback value to return if the translation is not available.
+ * @returns {string} The translated value or the fallback value.
+ */
+function HKTraslateFallback(translate, key, fallback) {
+  const r = translate(key);
+  return r === key ? r : fallback;
+}

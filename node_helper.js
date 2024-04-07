@@ -151,6 +151,8 @@ module.exports = NodeHelper.create({
           // Change to the new frotend ID
           this.backendId = payload.frontendId;
           this.sendSocketNotification("BACKEND_SHOULD_RESTART", false);
+          this.events.emit("*", "FRONTEND_REAUTH");
+
           if (payload.frontendId !== "ABC")
             console.info(
               "[\x1b[35mMMM-HomeKit\x1b[0m] Frontend reauth: >> \x1b[44m\x1b[37m %s \x1b[0m",

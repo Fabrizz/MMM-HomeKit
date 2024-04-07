@@ -154,6 +154,7 @@ class AccentColorHandler {
       addIdentifyingMaterial: true,
     };
     this.helperData = config.helperRef;
+    this.currentState = [false, [0, 0, 0]];
 
     this.accessory.on("paired", () =>
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
@@ -182,6 +183,7 @@ class AccentColorHandler {
     );
 
     this.accessory.on("stateChange", (state) => {
+      this.currentState = state;
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
         type: "set",
         state: state[0],
@@ -191,6 +193,22 @@ class AccentColorHandler {
           state[1][2] / 100,
         ),
       });
+    });
+
+    events.on("*", (payload) => {
+      switch (payload) {
+        case "FRONTEND_REAUTH":
+          sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
+            type: "set",
+            state: this.currentState[0],
+            color: HSVtoRGB(
+              this.currentState[1][0] / 360,
+              this.currentState[1][1] / 100,
+              this.currentState[1][2] / 100,
+            ),
+          });
+          break;
+      }
     });
   }
 
@@ -217,6 +235,7 @@ class ScreenControlHandler {
       config.name,
       config.serviceName,
       this.ACCESSORY_UUID,
+      [true, 100],
     );
     this.accessoryPublishInfo = {
       username: "17:51:09:F4:BC:8C",
@@ -255,7 +274,8 @@ class ScreenControlHandler {
 
     this.accessory.on("stateChange", (state) => {
       sendMirrorHandlerNotification(this.NOTIFICATION_NAME, {
-        state,
+        type: "set",
+        to: state,
       });
     });
   }
@@ -278,11 +298,11 @@ class PageControlHandler {
   constructor(config, events, sendMirrorHandlerNotification, version) {
     this.ACCESSORY_UUID = "FABRIZZ:MMMHK:PAGECONTROL";
     this.NOTIFICATION_NAME = config.helperRef.notificationName;
-    this.pageList = ["Aaa", "Bbb", "Ccc"];
-    this.pageListState = true
+    this.pageList = config.pageList;
+    this.pageListState = config.startOnFirst
       ? Array.from(this.pageList).map((_, i) => i === 0)
       : Array.from(this.pageList).map((_) => false);
-    this.currentPage = true ? 0 : undefined;
+    this.currentPage = config.startOnFirst ? 0 : undefined;
     this.accessory = new SwitchMultiple(
       version,
       config.name,

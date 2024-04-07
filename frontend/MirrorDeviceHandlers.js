@@ -6,7 +6,7 @@ const HKExperimentalBridgeConfiguration = {
     notificationName: "BRIDGE",
     icon: "modem",
     description:
-      "Exposes a switch to control MMM-LiveLyrics, works bi-directionally with module state.",
+      "Exposes multiple Homekit accessories only using one server (bridge), this feature is experimental.",
     docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
   },
 };
@@ -29,11 +29,11 @@ class HKToggleLyricsHandler {
       name:
         configObject.name && typeof configObject.name === "string"
           ? configObject.name.substring(0, 16)
-          : translate("HK_ACCS_BASE"),
+          : translate("ACCESSORY_LYRICS_NAME"),
       serviceName:
         configObject.serviceName && typeof configObject.serviceName === "string"
           ? configObject.serviceName.substring(0, 16)
-          : translate("HK_SRVC_LYRICS"),
+          : translate("ACCESSORY_LYRICS_SERVICE"),
     };
 
     if (
@@ -51,8 +51,7 @@ class HKToggleLyricsHandler {
     this.deviceConfig.helperRef = {
       notificationName: "TOGGLE_LYRICS",
       icon: "toggle",
-      description:
-        "Exposes a switch to control MMM-LiveLyrics, works bi-directionally with module state.",
+      description: translate("ACCESSORY_LYRICS_DESCRIPTION"),
       docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
@@ -100,20 +99,30 @@ class HKAccentColorHandler {
     loggers,
   ) {
     this.root = document.querySelector(":root");
-    this.notificationsListenTo = ["HK_ACCENTCOLOR_GET"];
+    this.notificationsListenTo = [];
     this.accentColorState = false;
     this.accentColorRGB = [0, 0, 0];
+
+    if (configObject.useThemeLock)
+      this.notificationsListenTo.push("THEME_PREFERENCE");
+
+    this.externalLock = [];
+    this.cssVar = undefined;
 
     this.deviceConfig = {
       name:
         configObject.name && typeof configObject.name === "string"
           ? configObject.name.substring(0, 16)
-          : translate("HK_ACCS_BASE"),
+          : translate("ACCESSORY_ACCENTCOLOR_NAME"),
       serviceName:
         configObject.serviceName && typeof configObject.serviceName === "string"
           ? configObject.serviceName.substring(0, 16)
-          : translate("HK_SRVC_ACCENT"),
+          : translate("ACCESSORY_ACCENTCOLOR_SERVICE"),
     };
+
+    this.cssVar = configObject.cssVariable
+      ? configObject.cssVariable
+      : "--HMKT-ACCENTCOLOR-COLOR";
 
     if (
       configObject.port &&
@@ -129,16 +138,38 @@ class HKAccentColorHandler {
     this.deviceConfig.helperRef = {
       notificationName: "ACCENT_COLOR",
       icon: "lightbulb",
-      description:
-        "Exposes a HSB lightbulb, controls one-way the MM2 accent color (or any css var).",
+      description: translate("ACCESSORY_ACCENTCOLOR_DESCRIPTION"),
       docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
-    devicesEventStream.on("__HK_ACCENTCOLOR_GET", (_) => {
-      if (this.accentColorState) {
-        sendNotification("HK_ACCENTCOLOR_SET", this.accentColorRGB);
-      } else {
-        sendNotification("HK_ACCENTCOLOR_SET", false);
+    this.logStatus = (payload) =>
+      loggers.debug(
+        `%c     %c RGB: ${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${
+          this.accentColorRGB[2]
+        } | Sets "${this.cssVar}" to ${
+          this.accentColorState ? "ON" : "OFF"
+        } | ${this.externalLock.length < 1 ? "Unlocked" : "Locked"}`,
+        `background-color:rgb(${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]});color:white;border-radius:0.8em;`,
+        "",
+        payload,
+      );
+
+    devicesEventStream.on("__THEME_PREFERENCE", (payload) => {
+      console.log("__THEME_PREFERENCE", payload);
+      if (payload.set === "lock") {
+        this.externalLock.push(payload.provider);
+      } else if (payload.set === "unlock") {
+        this.externalLock = this.externalLock.filter(
+          (provider) => provider !== payload.provider,
+        );
+
+        if (this.accentColorState) {
+          if (loggers.shouldLog) this.logStatus(payload);
+          this.root.style.setProperty(
+            this.cssVar,
+            `rgb(${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]})`,
+          );
+        }
       }
     });
 
@@ -146,26 +177,27 @@ class HKAccentColorHandler {
       if (payload.type === "set") {
         this.accentColorState = payload.state;
         this.accentColorRGB = payload.color;
-        this.root.style.setProperty(
-          "--HMKT-INTERNAL-ACCENTCOLOR-RESULT",
-          this.accentColorState
-            ? `rgb(${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]})`
-            : "var(--HMKT-INTERNAL-ACCENTCOLOR-BASE)",
-        );
+
         if (this.accentColorState) {
-          sendNotification("HK_ACCENTCOLOR_SET", this.accentColorRGB);
+          sendNotification("HK_ACCENTCOLOR_SET", {
+            locked: !this.externalLock.length < 1,
+            color: this.accentColorRGB,
+          });
+          if (this.externalLock.length < 1)
+            this.root.style.setProperty(
+              this.cssVar,
+              `rgb(${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]})`,
+            );
         } else {
-          sendNotification("HK_ACCENTCOLOR_SET", false);
+          sendNotification("HK_ACCENTCOLOR_SET", {
+            locked: !this.externalLock.length < 1,
+            color: false,
+          });
+          if (this.externalLock.length < 1)
+            this.root.style.removeProperty(this.cssVar);
         }
-        if (loggers.shouldLog) {
-          const color = `rgb(${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]})`;
-          loggers.debug(
-            `%c     %c (${this.accentColorState}) RGB: ${this.accentColorRGB[0]}, ${this.accentColorRGB[1]}, ${this.accentColorRGB[2]}`,
-            `background-color:${color};color:white;border-radius:0.8em;`,
-            "",
-            payload,
-          );
-        }
+
+        if (loggers.shouldLog) this.logStatus(payload);
       }
     });
   }
@@ -189,16 +221,17 @@ class HKScreenControlHandler {
   ) {
     this.screenControlState = undefined;
     this.notificationsListenTo = [];
+    this.currentState = [true, 100];
 
     this.deviceConfig = {
       name:
         configObject.name && typeof configObject.name === "string"
           ? configObject.name.substring(0, 16)
-          : translate("HK_ACCS_BASE"),
+          : translate("ACCESSORY_SCREENCONTROL_NAME"),
       serviceName:
         configObject.serviceName && typeof configObject.serviceName === "string"
           ? configObject.serviceName.substring(0, 16)
-          : translate("HK_SRVC_SCREEN"),
+          : translate("ACCESSORY_SCREENCONTROL_SERVICE"),
     };
 
     if (
@@ -215,13 +248,29 @@ class HKScreenControlHandler {
     this.deviceConfig.helperRef = {
       notificationName: "SCREEN_CONTROL",
       icon: "lightbulb",
-      description:
-        "Exposes a light with brightness control to simulate the mirror screen.",
+      description: translate("ACCESSORY_SCREENCONTROL_DESCRIPTION"),
       docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
     devicesEventStream.on("SCREEN_CONTROL", (payload) => {
-      console.log(payload);
+      if (payload.type === "set") {
+        const [state, brightness] = payload.to;
+        if (state !== this.currentState[0]) {
+          this.currentState[0] = state;
+          if (state) {
+            sendNotification("REMOTE_ACTION", { action: "MONITORON" });
+          } else {
+            sendNotification("REMOTE_ACTION", { action: "MONITOROFF" });
+          }
+        }
+        if (brightness !== this.currentState[1]) {
+          this.currentState[1] = brightness;
+          sendNotification("REMOTE_ACTION", {
+            action: "BRIGHTNESS",
+            value: brightness,
+          });
+        }
+      }
     });
   }
   configuration() {
@@ -233,7 +282,7 @@ class HKScreenControlHandler {
 }
 
 /** HKPageControllHandler */
-class HKPageControllHandler {
+class HKPageControlHandler {
   constructor(
     configObject,
     devicesEventStream,
@@ -256,6 +305,9 @@ class HKPageControllHandler {
           : translate("HK_SRVC_PAGE"),
     };
 
+    this.deviceConfig.pageList = ["Aaa", "Bbb", "Ccc"];
+    this.deviceConfig.startOnFirst = true;
+
     if (
       configObject.port &&
       typeof configObject.port === "number" &&
@@ -270,8 +322,7 @@ class HKPageControllHandler {
     this.deviceConfig.helperRef = {
       notificationName: "PAGE_CONTROL",
       icon: "toggles",
-      description:
-        "Exposes a power strip that controls the current MM2 page, you can control them using shorcuts!",
+      description: translate("ACCESSORY_PAGECONTROL_DESCRIPTION"),
       docsUrl: "https://github.com/Fabrizz/MMM-HomeKit",
     };
 
@@ -292,5 +343,5 @@ const HKAvailableFeatureHandlers = [
   ["toggleLyrics", HKToggleLyricsHandler],
   ["accentColor", HKAccentColorHandler],
   ["screenControl", HKScreenControlHandler],
-  ["pageControl", HKPageControllHandler],
+  ["pageControl", HKPageControlHandler],
 ];

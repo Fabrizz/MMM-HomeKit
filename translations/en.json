@@ -6,6 +6,23 @@
   "BACKEND_RESYNC": "A frontend reload was detected.",
   "BACKEND_RESYNC_OUTDATED": "Changes to the config.json file were made, restart MM² for them to take effect. You may have to restart the Homekit configuration for the change to sincronize with the Home app.",
   "BACKEND_DEVICE_ERROR": "An error while creating backend devices/handlers/hap occurred. Check your configuration!",
+  
+  "ACCESSORY_LYRICS_NAME": "Lyrics Control",
+  "ACCESSORY_LYRICS_SERVICE": "Lyrics Control SRV",
+  "ACCESSORY_LYRICS_DESCRIPTION": "Exposes a switch to control MMM-LiveLyrics, works bi-directionally with module state.",
+
+  "ACCESSORY_ACCENTCOLOR_NAME": "Accent Color",
+  "ACCESSORY_ACCENTCOLOR_SERVICE": "Accent Color SRV",
+  "ACCESSORY_ACCENTCOLOR_DESCRIPTION": "Exposes a HSB lightbulb, controls one-way the MM2 accent color (or any css var).",
+
+  "ACCESSORY_SCREENCONTROL_NAME": "Screen control",
+  "ACCESSORY_SCREENCONTROL_SERVICE": "Screen control SRV",
+  "ACCESSORY_SCREENCONTROL_DESCRIPTION": "Exposes a light with brightness control to simulate the mirror screen.",
+
+  "ACCESSORY_PAGECONTROL_NAME": "Page selector",
+  "ACCESSORY_PAGECONTROL_SERVICE": "Page selector SRV",
+  "ACCESSORY_PAGECONTROL_DESCRIPTION": "Exposes a power strip that controls the current MM2 page, you can control them using shorcuts!",
+
   "CH_CTA_SUBTITLE": "Configuration helper",
   "CH_CTA_BODY": "This page will help you adding the virtual devices to Homekit. You should see your devices below, click any card to see the device data and HK pairing code. To restart the Homekit information, click on the",
   "CH_CTA_BTN_ADD": "Add devices to Homekit",
@@ -17,9 +34,11 @@
   "CH_TYPE": "Type",
   "CH_TIMESTAMP": "Timestamp",
   "CH_PAYLOAD": "Payload",
+  
   "CH_MODAL_ADD_TITLE": "Adding devices to Homekit",
   "CH_MODAL_ADD_BODY": "If you can see this message, the module has loaded correctly! Click on any of the device cards to add them to Homekit.",
   "CH_MODAL_ADD_BTN": "Lets go",
+  
   "CH_MODAL_DEVICE_PINCODE": "Pincode",
   "CH_MODAL_DEVICE_USERNAME": "Username",
   "CH_MODAL_DEVICE_PORT": "Port",
@@ -34,6 +53,7 @@
   "CH_MODAL_DEVICE_BTN_DOCS": "Documentation",
   "CH_MODAL_DEVICE_BTN_GENERALCONFIG": "General configuration",
   "CH_MODAL_DEVICE_BTN_CLOSE": "Close",
+  
   "CH_MODAL_CONFIG_TITLE": "General settings",
   "CH_MODAL_CONFIG_DATA_TITLE": "View loaded device, translation data",
   "CH_MODAL_CONFIG_DATA_BODY": "View data sent from the frontend. Includes translations, devices and bridges.",
@@ -43,6 +63,7 @@
   "CH_MODAL_CONFIG_DELETE_BTN": "Read more & delete Homekit data",
   "CH_MODAL_CONFIG_BTN_DOCS": "View documentation",
   "CH_MODAL_CONFIG_BTN_CLOSE": "Close",
+  
   "CH_MODAL_DELETE_TITLE": "Removing Homekit data",
   "CH_MODAL_DELETE_SUBTITLE": "All accessories will be erased from the store",
   "CH_MODAL_DELETE_NOTICE": "IMPORTANT: You will have to remove all of your current configured accessories from the Home app and add them again. Not removing the devices from the Home app could create phantom accessories.",
@@ -52,10 +73,12 @@
   "CH_MODAL_DELETE_BTN_DELETE_DONE": "HAP data removed! Restart MM2",
   "CH_MODAL_DELETE_BTN_DELETE_ERROR": "Error removing HAP data",
   "CH_MODAL_DELETE_BTN_BACK": "Go back",
+  
   "CH_MODAL_DATA_DEVICE": "Device objects",
   "CH_MODAL_DATA_TRANSLATIONS": "Translations",
   "CH_MODAL_DATA_OTHER": "Other",
   "CH_MODAL_DATA_BTN_BACK": "Go back",
+  
   "CH_CODE_CREATED": "Created",
   "CH_CODE_PAIRED": "Paired",
   "CH_CODE_ADVERTISED": "Advertised",

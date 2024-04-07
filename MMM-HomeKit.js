@@ -14,6 +14,8 @@ Module.register("MMM-HomeKit", {
 
     accentColor: {
       name: "MM Accent color",
+      cssVariable: "--color-text-dimmed",
+      useThemeLock: true,
     },
     /*
     accentColor: {
@@ -22,6 +24,7 @@ Module.register("MMM-HomeKit", {
       serviceName: "TR(Accent Color)" | <str>,
     } | false */
 
+    // api: MMM-Remote-Control or similar
     screenControl: true,
     /*
     screenState: {
@@ -59,9 +62,9 @@ Module.register("MMM-HomeKit", {
   /******************************************************** MM2 Loaders */
   getScripts: function () {
     let files = [
-      this.file("frontend/MirrorDeviceHandlers.js"),
-      this.file("frontend/HomekitDomBuilder.js"),
       this.file("frontend/HomekitUtils.js"),
+      this.file("frontend/HomekitDomBuilder.js"),
+      this.file("frontend/MirrorDeviceHandlers.js"),
     ];
     return files;
   },
@@ -106,7 +109,7 @@ Module.register("MMM-HomeKit", {
     this.availableFeatureHandlers = HKAvailableFeatureHandlers;
     /* eslint-enable no-undef */
 
-    this.FRONTEND_TRANSLATIONS = [
+    this.CFGHELPER_TRANSLATIONS = [
       "CH_CTA_SUBTITLE",
       "CH_CTA_BODY",
       "CH_CTA_BTN_ADD",
@@ -206,7 +209,7 @@ Module.register("MMM-HomeKit", {
             // eslint-disable-next-line no-undef
             HKTranslateAll(
               (x, y) => this.translate(x, y),
-              this.FRONTEND_TRANSLATIONS,
+              this.CFGHELPER_TRANSLATIONS,
             ),
           );
         } catch (error) {
@@ -258,7 +261,6 @@ Module.register("MMM-HomeKit", {
     }
   },
   sendAccesoryNotification(eventName, eventPayload) {
-    console.log(eventName, eventPayload, this);
     this.sendSocketNotification("HOMEKIT_ACCESSORY_UPDATE", {
       eventName,
       eventPayload,
